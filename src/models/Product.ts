@@ -21,10 +21,6 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: Number,
     },
-    chaza: {
-      ref: "Chaza",
-      type: mongoose.Schema.Types.ObjectId,
-    },
   },
   {
     timestamps: true,
