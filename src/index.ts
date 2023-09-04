@@ -1,15 +1,7 @@
-import express from 'express'
-const app = express()
-app.use(express.json())
+import app from "./config/app";
+//import "./config/database";
 
-const PORT = 3000
+const PORT = process.env.SERVER_PORT ?? 3000;
+app.listen(PORT);
 
-app.get('/ping', (_req, res) => { //El underscore funciona para que no salga la sugerencia de que la variable está declarada pero no usada 
-    console.log('someone pinged here!!')
-    res.send('ping')
-})
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-})
-
+console.log("sever listen on port", PORT);
