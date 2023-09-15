@@ -26,6 +26,10 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    success: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
