@@ -21,6 +21,10 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: Number,
     },
+    total_sales: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
