@@ -3,6 +3,18 @@ import { Request, Response } from "express";
 import productService from "../services/product.service";
 
 const product = {
+  //Route: GET /product
+  getProduct: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const data = await productService.get(req.body.name);
+      return res.status(200).send({
+        message: "Product successfully retrieved",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
   //Route: GET /products
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -30,10 +42,9 @@ const product = {
   //Route: PUT /updateProduct
   updateProduct: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const response = null;
+      const data = await productService.update(req.body);
       return res.status(200).send({
-        message: "Product successfully retrieved",
-        data: response,
+        message: "Product successfully updated",
       });
     } catch (error: any) {
       return res.status(400).send({ message: error.message });
@@ -42,10 +53,10 @@ const product = {
   //Route: DELETE /deleteProduct
   deleteProduct: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const response = null;
+      const data = await productService.delete(req.body.name);
       return res.status(200).send({
         message: "Product successfully deleted",
-        data: response,
+        data: data,
       });
     } catch (error: any) {
       return res.status(400).send({ message: error.message });

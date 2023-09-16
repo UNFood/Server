@@ -5,6 +5,7 @@ import product  from '../controllers/product.controller';
 const router = express.Router();
 
 //Routes
+router.get('/product', product.getProduct);
 router.get('/products', product.getAllProducts);
 router.post('/createProduct', product.createProduct);
 router.put('/updateProduct', product.updateProduct);    
