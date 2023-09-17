@@ -6,6 +6,7 @@ import userRoutes from './userRoutes';
 
 import { config } from '../config/config';
 import exp from 'constants';
+import router_manager from './manager.router';
 
 const router = express();
 
@@ -47,12 +48,13 @@ const StartServer = () => {
         }
         next();
     })
+    //Body parser
+    router.use(express.json());
 
-    //Routes
     router.use('/users',userRoutes); // Obtener todos los usuarios
-    router.use('/chazas', chazaRoutes); // Usar las rutas de chaza
+    router.use('/chazas', chazaRoutes); // Usar las rutas de chazas
+    router.use('/', router_manager);
     
-
     //Healthcheck
     router.get('/ping', (req, res, next) => res.status(200).json({ message: 'pong'}));
 
