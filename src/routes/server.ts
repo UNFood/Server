@@ -1,6 +1,9 @@
 import express from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
+import chazaRoutes from './chazaRoutes'; 
+
+
 import { config } from '../config/config';
 import exp from 'constants';
 
@@ -46,6 +49,7 @@ const StartServer = () => {
     })
 
     //Routes
+    router.use('/chazas', chazaRoutes); // Usar las rutas de chaza
 
     //Healthcheck
     router.get('/ping', (req, res, next) => res.status(200).json({ message: 'pong'}));
