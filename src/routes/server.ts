@@ -49,8 +49,10 @@ const StartServer = () => {
     })
 
     //Routes
-    router.use('/users',userRoutes);
+    router.use('/users',userRoutes); // Obtener todos los usuarios
     router.use('/chazas', chazaRoutes); // Usar las rutas de chaza
+    
+
     //Healthcheck
     router.get('/ping', (req, res, next) => res.status(200).json({ message: 'pong'}));
 
