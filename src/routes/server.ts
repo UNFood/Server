@@ -1,8 +1,12 @@
 import express from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
+import chazaRoutes from './chazaRoutes'; 
+import userRoutes from './userRoutes';
+
 import { config } from '../config/config';
 import exp from 'constants';
+import router_manager from './manager.router';
 import router_manager from './manager.router';
 
 const router = express();
@@ -47,8 +51,11 @@ const StartServer = () => {
     })
     //Body parser
     router.use(express.json());
-    //Routes
+
+    router.use('/users',userRoutes); // Obtener todos los usuarios
+    router.use('/chazas', chazaRoutes); // Usar las rutas de chazas
     router.use('/', router_manager);
+    
     //Healthcheck
     router.get('/ping', (req, res, next) => res.status(200).json({ message: 'pong'}));
 
