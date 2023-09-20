@@ -3,6 +3,7 @@ import http from 'http';
 import mongoose from 'mongoose';
 import { config } from '../config/config';
 import exp from 'constants';
+import router_manager from './manager.router';
 
 const router = express();
 
@@ -44,9 +45,10 @@ const StartServer = () => {
         }
         next();
     })
-
+    //Body parser
+    router.use(express.json());
     //Routes
-
+    router.use('/', router_manager);
     //Healthcheck
     router.get('/ping', (req, res, next) => res.status(200).json({ message: 'pong'}));
 
