@@ -6,7 +6,7 @@ import userRoutes from './userRoutes';
 
 import { config } from '../config/config';
 import exp from 'constants';
-import router_manager from './manager.router';
+import router_manager from './manager.routes';
 
 
 const router = express();
