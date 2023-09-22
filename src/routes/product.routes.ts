@@ -2,13 +2,13 @@
 import express from 'express';
 import product  from '../controllers/product.controller';
 
-const router = express.Router();
+const product_router = express.Router();
 
 //Routes
-router.get('/product', product.getProduct);
-router.get('/products', product.getAllProducts);
-router.post('/createProduct', product.createProduct);
-router.put('/updateProduct', product.updateProduct);    
-router.delete('/deleteProduct', product.deleteProduct);
+product_router.get('/product', product.getProduct);
+product_router.get('/products', product.getAllProducts);
+product_router.post('/createProduct', product.createProduct);
+product_router.put('/updateProduct', product.updateProduct);    
+product_router.delete('/deleteProduct', product.deleteProduct);
 
-export default router;
+export default product_router;

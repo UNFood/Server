@@ -1,8 +1,6 @@
 import express from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
-import chazaRoutes from './chazaRoutes'; 
-import userRoutes from './userRoutes';
 
 import { config } from '../config/config';
 import exp from 'constants';
@@ -49,11 +47,8 @@ const StartServer = () => {
         }
         next();
     })
-    //Body parser
-    router.use(express.json());
-
-    router.use('/users',userRoutes); // Obtener todos los usuarios
-    router.use('/chazas', chazaRoutes); // Usar las rutas de chazas
+    
+    //Routes
     router.use('/', router_manager);
     
     //Healthcheck
