@@ -1,10 +1,11 @@
-import Document from 'mongoose';
+import Document from "mongoose";
 
-export interface ProductI{
-    name: String;
-    description: String;
-    price: Number;
-    category: Number | undefined;
-    stock: undefined | Number;
+export interface ProductI {
+  name: String;
+  description: String;
+  price: Number;
+  image: String;
+  category: Number;
+  stock: Number | undefined;
+  total_sales: Number;
 }
-  
