@@ -1,11 +1,22 @@
-import { Types } from "mongoose";
-
-export interface User {
+export interface UserI {
+  username: string;
   name: string;
-  secondName: string;
   lastName: string;
   email: string;
   password: string;
-  role: number;
-  balance: number;
+  address: string;
+  phone: string;
+}
+
+export interface UserRegister {
+  username: string;
+  name: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+export interface UserLogin {
+  username: string;
+  password: string;
 }
