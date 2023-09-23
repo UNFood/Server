@@ -18,6 +18,7 @@ const product = {
   //Route: GET /products
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
+      console.log("get");
       const data = await productService.getAll();
       return res.status(200).send({
         message: "Products successfully retrieved",
