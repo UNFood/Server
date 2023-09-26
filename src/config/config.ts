@@ -8,6 +8,11 @@ const MONGO_HOST = process.env.MONGO_HOST || "";
 const SERVER_PORT = process.env.SERVER_PORT ?? 3000;
 const MONGO_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`;
 
+
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+
+
 export const config = {
   mongo: {
     username: MONGO_USERNAME,

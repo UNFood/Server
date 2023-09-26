@@ -56,6 +56,30 @@ const authServices = {
 
     return token;
   },
+  handleGoogleUser: async (googleId: string, email: string) => {
+    // Check if user exists in your database
+    let user = await User.findOne({ googleId });
+    
+    if (!user) {
+      // If user doesn't exist, create a new user
+      user = new User({
+        googleId,
+        email,
+        // any other fields you want to populate
+      });
+      await user.save();
+    } else {
+      // Update user if needed
+      // For example, you might want to update the email if it has changed on the Google side
+      if (user.email !== email) {
+        user.email = email;
+        await user.save();
+      }
+    }
+    
+    // Return user data or token or whatever you need
+    return user;
+  }
 };
 
 export default authServices;
