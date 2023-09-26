@@ -3,8 +3,9 @@ import User from "../models/User";
 import { Request, Response } from "express";
 import authServices from "../services/auth.service";
 
-const CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID"; // Replace with your Google Client ID
+const CLIENT_ID = "714119740864-86bb52urngugkd0t6iorv6cq5rv5ecvm.apps.googleusercontent.com"; // Replace with your Google Client ID
 const client = new OAuth2Client(CLIENT_ID);
+
 
 const auth = {
   signup: async (req: Request, res: Response): Promise<Response> => {
@@ -38,15 +39,13 @@ const auth = {
         return res.status(400).json({ message: "Invalid Google token" });
       }
 
-      // Here you can check if the user exists in your database and create or update accordingly
-      // For demonstration, let's assume you have a function in authServices to handle this
-      const userData = await authServices.handleGoogleUser(googleId, email);
+      const userData = await authServices.handleGoogleUser(googleId, email);  // <-- Pass both googleId and email
 
       return res.status(200).json({ message: "User authenticated with Google", data: userData });
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }
-  }
+  },
 };
 
 export default auth;
