@@ -1,0 +1,47 @@
+[
+    {
+      "username": "usuario1",
+      "name": "Juan",
+      "lastName": "Pérez",
+      "email": "juan@example.com",
+      "password": "contraseña1",
+      "address": "Calle 70 # 15-45, Bogotá",
+      "phone": "+57 300 123 4567"
+    },
+    {
+      "username": "usuario2",
+      "name": "María",
+      "lastName": "Gómez",
+      "email": "maria@example.com",
+      "password": "contraseña2",
+      "address": "Carrera 45 # 35-20, Bogotá",
+      "phone": "+57 310 987 6543"
+    },
+    {
+      "username": "usuario3",
+      "name": "Carlos",
+      "lastName": "López",
+      "email": "carlos@example.com",
+      "password": "contraseña3",
+      "address": "Calle 80 # 10-30, Bogotá",
+      "phone": "+57 320 555 1234"
+    },
+    {
+      "username": "usuario4",
+      "name": "Ana",
+      "lastName": "Ramírez",
+      "email": "ana@example.com",
+      "password": "contraseña4",
+      "address": "Avenida 19 # 5-67, Bogotá",
+      "phone": "+57 300 111 2222"
+    },
+    {
+      "username": "usuario5",
+      "name": "Luis",
+      "lastName": "Martínez",
+      "email": "luis@example.com",
+      "password": "contraseña5",
+      "address": "Carrera 10 # 25-40, Bogotá",
+      "phone": "+57 310 999 8888"
+    }
+]  
