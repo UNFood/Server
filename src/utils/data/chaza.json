@@ -1,0 +1,33 @@
+[
+    {
+      "owner": "", 
+      "name": "Chaza 1",
+      "description": "Descripción de Chaza 1",
+      "type": 1,
+      "address": "Calle 1 # 123, Bogotá",
+      "phone": "+57 300 111 1111",
+      "products": [],
+      "score": 4.5
+    },
+    {
+      "owner": "",
+      "name": "Chaza 2",
+      "description": "Descripción de Chaza 2",
+      "type": 2,
+      "address": "Carrera 2 # 456, Bogotá",
+      "phone": "+57 310 222 2222",
+      "products": [],
+      "score": 3.8
+    },
+    {
+      "owner": "usuario3",
+      "name": "Chaza 3",
+      "description": "Descripción de Chaza 3",
+      "type": 1,
+      "address": "Calle 3 # 789, Bogotá",
+      "phone": "+57 320 333 3333",
+      "products": [],
+      "score": 4.2
+    }
+  ]
+  
