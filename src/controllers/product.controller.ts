@@ -6,7 +6,7 @@ const product = {
   //Route: GET /product
   getProduct: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await productService.get(req.body.name);
+      const data = await productService.get(req.body._id);
       return res.status(200).send({
         message: "Product successfully retrieved",
         data: data,
@@ -54,7 +54,7 @@ const product = {
   //Route: DELETE /deleteProduct
   deleteProduct: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await productService.delete(req.body.name);
+      const data = await productService.delete(req.body.chaza_id,req.body._id);
       return res.status(200).send({
         message: "Product successfully deleted",
         data: data,
