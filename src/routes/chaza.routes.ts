@@ -1,13 +1,13 @@
 // chazaRoutes.ts
 import { Router } from 'express';
-import { createChaza, getAllChazas, getChazaById, updateChaza,deleteChaza} from '../controllers/chaza.controller';
-
+import chaza from '../controllers/chaza.controller';
 const chaza_router = Router();
 
-chaza_router.post('/', createChaza);
-chaza_router.get('/:id', getChazaById);
-chaza_router.delete('/:id', deleteChaza);
-chaza_router.get('/', getAllChazas);
-chaza_router.patch('/:id', updateChaza);
+//Routes
+chaza_router.get('/chaza', chaza.getChaza);
+chaza_router.get('/chazas', chaza.getAllChazas);
+chaza_router.post('/createChaza', chaza.createChaza);
+chaza_router.put('/updateChaza', chaza.updateChaza);    
+chaza_router.delete('/deleteChaza', chaza.deleteChaza);
 
 export default chaza_router;

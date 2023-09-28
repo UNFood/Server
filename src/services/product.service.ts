@@ -1,13 +1,15 @@
 import Product from "../models/Product";
-import { ProductI } from "../types/product";
+import { ProductCreateI, ProductI } from "../types/product";
+import chazaService from "./chaza.service";
 
 const productService = {
-  get: async function (name: string): Promise<ProductI> {
+  get: async function (_id: String): Promise<ProductI> {
     //Consultar en la colección de productos de la base de datos
-    const productDB = await Product.findOne({ name: name }).exec();
+    const productDB = await Product.findOne({ _id: _id }).exec();
     if (!productDB) throw new Error("Product not found");
     //Convertir el resultado a un objeto de tipo ProductI
     let product: ProductI = {
+      _id: productDB._id,
       name: productDB.name,
       description: productDB.description,
       category: productDB.category,
@@ -24,6 +26,7 @@ const productService = {
     const productListDB = await Product.find().exec();
     //Convertir el resultado a un arreglo de objetos de tipo ProductI
     let products = productListDB.map((product) => ({
+      _id: product._id,
       name: product.name,
       description: product.description,
       category: product.category,
@@ -35,7 +38,7 @@ const productService = {
     //Retornar el arreglo de productos
     return products;
   },
-  create: async function (product: ProductI): Promise<ProductI> {
+  create: async function (product: ProductCreateI): Promise<ProductCreateI> {
     //Crear un nuevo producto que va a ser guardado en la base de datos
     let newProduct = new Product({
       name: product.name,
@@ -51,14 +54,20 @@ const productService = {
     let result = await newProduct.save();
     if (!result) throw new Error("Error saving product");
     //Convertir el resultado a un objeto de tipo ProductI
-    let data: ProductI = {
-      name: product.name,
-      description: product.description,
-      category: product.category,
-      price: product.price,
-      stock: product.stock,
-      image: product.image,
-      total_sales: product.total_sales,
+
+    //Añadir el producto a la chaza
+    await chazaService.addProduct(product.chaza_id.toString(), result._id.toString());
+
+    let data: ProductCreateI = {
+      chaza_id: product.chaza_id,
+      _id: result._id,
+      name: result.name,
+      description: result.description,
+      category: result.category,
+      price: result.price,
+      stock: result.stock,
+      image: result.image,
+      total_sales: result.total_sales,
     };
     //Retornar el objeto creado
     return data;
@@ -72,6 +81,7 @@ const productService = {
     if (!productDB) throw new Error("Error updating product");
     //Convertir el resultado a un objeto de tipo ProductI
     let updateProduct: ProductI = {
+      _id: productDB._id,
       name: productDB.name,
       description: productDB.description,
       category: productDB.category,
@@ -83,12 +93,13 @@ const productService = {
     //Retornar el objeto actualizado
     return updateProduct;
   },
-  delete: async function (name: string): Promise<ProductI> {
+  delete: async function (chaza_id:String,_id: String): Promise<ProductI> {
     //Eliminar el producto de la base de datos
-    const productDB = await Product.findOneAndDelete({ name: name }).exec();
+    const productDB = await Product.findOneAndDelete({ _id: _id }).exec();
     if (!productDB) throw new Error("Error deleting product");
     //Convertir el resultado a un objeto de tipo ProductI
     let deleteProduct: ProductI = {
+      _id: productDB._id,
       name: productDB.name,
       description: productDB.description,
       category: productDB.category,
@@ -97,6 +108,8 @@ const productService = {
       image: productDB.image,
       total_sales: productDB.total_sales,
     };
+    //Eliminar el producto de la chaza
+    await chazaService.deleteProduct(chaza_id, productDB._id.toString());
     //Retornar el objeto eliminado
     return deleteProduct;
   },
