@@ -12,7 +12,6 @@ export interface ProductI {
 }
 
 export interface ProductCreateI {
-  _id: mongoose.Types.ObjectId;
   chaza_id: mongoose.Types.ObjectId;
   name: String;
   description: String;

@@ -16,7 +16,7 @@ export const initializeProducts = async (): Promise<void> => {
     }
 
     // Crea los productos desde el archivo JSON
-    await Product.insertMany(products);
+    
   } catch (error) {
     // Manejar cualquier error aquí
     console.error('Error al inicializar productos:', error);
