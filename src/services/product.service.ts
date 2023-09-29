@@ -60,7 +60,6 @@ const productService = {
 
     let data: ProductCreateI = {
       chaza_id: product.chaza_id,
-      _id: result._id,
       name: result.name,
       description: result.description,
       category: result.category,

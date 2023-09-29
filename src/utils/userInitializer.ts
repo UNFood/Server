@@ -16,7 +16,7 @@ export const initializeUsers = async (): Promise<void> => {
     }
 
     // Crea los usuarios desde el archivo JSON (reemplaza User con el modelo correcto)
-    await User.insertMany(users);
+    User.insertMany(users);
 
     console.log('Usuarios inicializados correctamente.');
   } catch (error) {
