@@ -1,6 +1,8 @@
 import fs from 'fs';
 import Product from '../models/Product';
-
+import chazaService from '../services/chaza.service';
+import productService from '../services/product.service';
+import { ProductCreateI } from '../types/product';
 export const initializeProducts = async (): Promise<void> => {
   try {
     // Leer el archivo productos.json
@@ -14,8 +16,12 @@ export const initializeProducts = async (): Promise<void> => {
     if (count > 0) {
       await Product.deleteMany();
     }
-
+    //Añadir los productos a las chazas
+    products.forEach(async (product: ProductCreateI) => {
+      await productService.create(product);
+    });
     // Crea los productos desde el archivo JSON
+    await Product.insertMany(products);
     
   } catch (error) {
     // Manejar cualquier error aquí
