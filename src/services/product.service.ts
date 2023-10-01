@@ -1,3 +1,4 @@
+import { query } from "express";
 import Product from "../models/Product";
 import { ProductCreateI, ProductI } from "../types/product";
 import chazaService from "./chaza.service";
@@ -56,7 +57,10 @@ const productService = {
     //Convertir el resultado a un objeto de tipo ProductI
 
     //Añadir el producto a la chaza
-    await chazaService.addProduct(product.chaza_id.toString(), result._id.toString());
+    await chazaService.addProduct(
+      product.chaza_id.toString(),
+      result._id.toString()
+    );
 
     let data: ProductCreateI = {
       chaza_id: product.chaza_id,
@@ -92,7 +96,7 @@ const productService = {
     //Retornar el objeto actualizado
     return updateProduct;
   },
-  delete: async function (chaza_id:String,_id: String): Promise<ProductI> {
+  delete: async function (chaza_id: String, _id: String): Promise<ProductI> {
     //Eliminar el producto de la base de datos
     const productDB = await Product.findOneAndDelete({ _id: _id }).exec();
     if (!productDB) throw new Error("Error deleting product");
@@ -111,6 +115,32 @@ const productService = {
     await chazaService.deleteProduct(chaza_id, productDB._id.toString());
     //Retornar el objeto eliminado
     return deleteProduct;
+  },
+  getByFilters: async function (
+    priceOrder: Number,
+    priceRange: Number[],
+    category: Number[]
+  ): Promise<ProductI[]> {
+    const query = {
+      price: { $gte: priceRange[0], $lte: priceRange[1] },
+      category: { $in: category },
+    };
+    const productListDB = await Product.find(query)
+      .sort({ price: priceOrder===1?"ascending":"descending"})
+      .exec();
+    //Convertir el resultado a un arreglo de objetos de tipo ProductI
+    let productsFiltered = productListDB.map((product) => ({
+      _id: product._id,
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      stock: product.stock,
+      image: product.image,
+      total_sales: product.total_sales,
+    }));
+    //Retornar el arreglo de productos
+    return productsFiltered;
   },
 };
 
