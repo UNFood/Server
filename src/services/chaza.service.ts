@@ -1,5 +1,5 @@
 import Chaza from "../models/Chaza";
-import {ChazaI, ChazaCreateI, ChazaUpdateI} from "../types/chaza";
+import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
 
 const chazaService = {
   get: async function (_id: String): Promise<ChazaI> {
@@ -17,6 +17,8 @@ const chazaService = {
       phone: chazaDB.phone,
       products: chazaDB.products,
       score: chazaDB.score,
+      image: chazaDB.image,
+      payment_method: chazaDB.payment_method,
     };
     //Retornar la chaza
     return chaza;
@@ -35,6 +37,8 @@ const chazaService = {
       phone: chaza.phone,
       products: chaza.products,
       score: chaza.score,
+      image: chaza.image,
+      payment_method: chaza.payment_method,
     }));
     //Retornar el arreglo de chazas
     return chazas;
@@ -66,12 +70,14 @@ const chazaService = {
       phone: result.phone,
       products: result.products,
       score: result.score,
+      image: result.image,
+      payment_method: result.payment_method,
     };
     //Retornar la chaza creada
     return data;
   },
   update: async function (newChaza: ChazaUpdateI): Promise<void> {
-    //Actualizar la chaza en la base de datos no retorna nada pues 
+    //Actualizar la chaza en la base de datos no retorna nada pues
     //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
     const chazaDB = await Chaza.findOneAndUpdate(
       { _id: newChaza._id },
@@ -94,11 +100,16 @@ const chazaService = {
       phone: chazaDB.phone,
       products: chazaDB.products,
       score: chazaDB.score,
+      image: chazaDB.image,
+      payment_method: chazaDB.payment_method,
     };
     //Retornar el objeto eliminado
     return deleteChaza;
   },
-  addProduct: async function (chaza_id: String | undefined, product_id: String) {
+  addProduct: async function (
+    chaza_id: String | undefined,
+    product_id: String
+  ) {
     //Agregar el producto a la chaza
     const chazaDB = await Chaza.findOneAndUpdate(
       { _id: chaza_id },
@@ -113,7 +124,7 @@ const chazaService = {
       { $pull: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error deleting product from chaza");
-  }
+  },
 };
 
 export default chazaService;
