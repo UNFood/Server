@@ -36,6 +36,15 @@ const chazaSchema = new mongoose.Schema(
       type: Number,
       default: -1,
     },
+    image: {
+      type: String,
+      requried: true,
+    },
+    payment_method: [
+      {
+        type: Number,
+      },
+    ],
   },
   {
     timestamps: true,
