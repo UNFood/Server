@@ -1,5 +1,8 @@
 import Product from "../models/Product";
-import { ProductI } from "../types/product";
+import { ProductI, ImageI } from "../types/product";
+import multer from "multer";
+import multerS3 from "multer-s3";
+import {s3Config} from "../config/s3"
 
 const productService = {
   get: async function (name: string): Promise<ProductI> {
@@ -100,6 +103,16 @@ const productService = {
     //Retornar el objeto eliminado
     return deleteProduct;
   },
+  uploadImage: multer({
+    storage: multerS3({
+        s3: s3Config,
+        bucket: "unfood",
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        key: function (req, file, cb) {
+            cb(null, Date.now().toString())
+        }
+    })
+})
 };
 
 export default productService;

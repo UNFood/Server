@@ -62,6 +62,20 @@ const product = {
     } catch (error: any) {
       return res.status(400).send({ message: error.message });
     }
+  },  
+  //Route: POST /uploadImage
+  uploadImage: (req: Request, res: Response) => {
+    productService.uploadImage.single('file')(req, res, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(400).json({ message: 'File upload failed' });
+      }
+      console.log(req.file);
+      return res.status(200).send({
+        message: "Image successfully uploaded",
+      });
+
+    });
   },
 };
 
