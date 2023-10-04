@@ -3,14 +3,11 @@ import "./config/database";
 import { initializeProducts } from "./utils/product.initializer";
 import { initializeUsers } from "./utils/userInitializer";
 import { initializeChazas } from "./utils/chaza.initializer";
-import cartRoutes from './routes/cart.routes';  // Import the cart routes
-import 'dotenv/config';
+import "dotenv/config";
 
 const PORT = process.env.SERVER_PORT ?? 3000;
 
-app.use('/cart', cartRoutes);  // Add this line to include the cart routes
-
-app.listen(PORT);   
+app.listen(PORT);
 
 console.log("server listen on port", PORT);
 
