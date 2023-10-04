@@ -1,10 +1,10 @@
 import Chaza from "../models/Chaza";
-import {ChazaI, ChazaCreateI, ChazaUpdateI} from "../types/chaza";
+import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
 
 const chazaService = {
   get: async function (_id: String): Promise<ChazaI> {
     //Consultar en la colección de chazas de la base de datos
-    const chazaDB = await Chaza.findOne({ _id: _id }).exec();
+    const chazaDB = await Chaza.findOne({ owner: _id }).exec();
     if (!chazaDB) throw new Error("Chaza not found");
     //Convertir el resultado a un objeto de tipo ChazaI
     let chaza: ChazaI = {
@@ -71,17 +71,17 @@ const chazaService = {
     return data;
   },
   update: async function (newChaza: ChazaUpdateI): Promise<void> {
-    //Actualizar la chaza en la base de datos no retorna nada pues 
+    //Actualizar la chaza en la base de datos no retorna nada pues
     //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
     const chazaDB = await Chaza.findOneAndUpdate(
-      { _id: newChaza._id },
+      { owner: newChaza._id },
       newChaza
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");
   },
   delete: async function (_id: String): Promise<ChazaI> {
     //Eliminar la chaza de la base de datos
-    const chazaDB = await Chaza.findOneAndDelete({ _id: _id }).exec();
+    const chazaDB = await Chaza.findOneAndDelete({ owner: _id }).exec();
     if (!chazaDB) throw new Error("Error deleting chaza");
     //Convertir el resultado a un objeto de tipo ChazaI
     let deleteChaza: ChazaI = {
@@ -98,10 +98,13 @@ const chazaService = {
     //Retornar el objeto eliminado
     return deleteChaza;
   },
-  addProduct: async function (chaza_id: String | undefined, product_id: String) {
+  addProduct: async function (
+    chaza_id: String | undefined,
+    product_id: String
+  ) {
     //Agregar el producto a la chaza
     const chazaDB = await Chaza.findOneAndUpdate(
-      { _id: chaza_id },
+      { owner: chaza_id },
       { $push: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error adding product to chaza");
@@ -109,11 +112,11 @@ const chazaService = {
   deleteProduct: async function (chaza_id: String, product_id: String) {
     //Eliminar el producto de la chaza
     const chazaDB = await Chaza.findOneAndUpdate(
-      { _id: chaza_id },
+      { owner: chaza_id },
       { $pull: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error deleting product from chaza");
-  }
+  },
 };
 
 export default chazaService;
