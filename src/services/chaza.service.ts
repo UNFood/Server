@@ -4,7 +4,7 @@ import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
 const chazaService = {
   get: async function (_id: String): Promise<ChazaI> {
     //Consultar en la colección de chazas de la base de datos
-    const chazaDB = await Chaza.findOne({ _id: _id }).exec();
+    const chazaDB = await Chaza.findOne({ owner: _id }).exec();
     if (!chazaDB) throw new Error("Chaza not found");
     //Convertir el resultado a un objeto de tipo ChazaI
     let chaza: ChazaI = {
@@ -80,14 +80,14 @@ const chazaService = {
     //Actualizar la chaza en la base de datos no retorna nada pues
     //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
     const chazaDB = await Chaza.findOneAndUpdate(
-      { _id: newChaza._id },
+      { owner: newChaza._id },
       newChaza
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");
   },
   delete: async function (_id: String): Promise<ChazaI> {
     //Eliminar la chaza de la base de datos
-    const chazaDB = await Chaza.findOneAndDelete({ _id: _id }).exec();
+    const chazaDB = await Chaza.findOneAndDelete({ owner: _id }).exec();
     if (!chazaDB) throw new Error("Error deleting chaza");
     //Convertir el resultado a un objeto de tipo ChazaI
     let deleteChaza: ChazaI = {
@@ -112,7 +112,7 @@ const chazaService = {
   ) {
     //Agregar el producto a la chaza
     const chazaDB = await Chaza.findOneAndUpdate(
-      { _id: chaza_id },
+      { owner: chaza_id },
       { $push: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error adding product to chaza");
@@ -120,7 +120,7 @@ const chazaService = {
   deleteProduct: async function (chaza_id: String, product_id: String) {
     //Eliminar el producto de la chaza
     const chazaDB = await Chaza.findOneAndUpdate(
-      { _id: chaza_id },
+      { owner: chaza_id },
       { $pull: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error deleting product from chaza");
