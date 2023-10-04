@@ -3,6 +3,7 @@ import product_router from "./product.routes";
 import user_router from "./user.routes";
 import chaza_router from "./chaza.routes";
 import auth_router from "./auth.routes";
+import order_router from "./order.routes";
 
 const router_manager = Router();
 
@@ -11,5 +12,6 @@ router_manager.use("/v1/auth", auth_router);
 router_manager.use("/v1/product", product_router);
 router_manager.use("/v1/user", user_router);
 router_manager.use("/v1/chaza", chaza_router);
+router_manager.use("/v1/order", order_router);
 
 export default router_manager;
