@@ -5,7 +5,7 @@ const chaza = {
   //Route: GET /chaza
   getChaza: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await chazaService.get(req.body._id);
+      const data = await chazaService.get(req.params.id);
       return res.status(200).send({
         message: "Chaza successfully retrieved",
         data: data,
@@ -53,7 +53,7 @@ const chaza = {
   //Route: DELETE /deleteChaza
   deleteChaza: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await chazaService.delete(req.body._id);
+      const data = await chazaService.delete(req.params.id);
       return res.status(200).send({
         message: "Chaza successfully deleted",
         data: data,

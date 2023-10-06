@@ -16,7 +16,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
 export const getByUser = async (req: Request, res: Response) => {
   try {
-    const data = await orderService.getByUser(req.body._id);
+    const data = await orderService.getByUser(req.params.id);
     return res.status(200).send({
       message: "Orders successfully retrieved",
       data: data,
@@ -27,7 +27,7 @@ export const getByUser = async (req: Request, res: Response) => {
 };
 export const getByChaza = async (req: Request, res: Response) => {
   try {
-    const data = await orderService.getByChaza(req.body._id);
+    const data = await orderService.getByChaza(req.params.id);
     return res.status(200).send({
       message: "Orders successfully retrieved",
       data: data,
@@ -52,7 +52,7 @@ export const updateOrder = async (req: Request, res: Response) => {
 // Delete an Order by ID
 export const deleteOrder = async (req: Request, res: Response) => {
   try {
-    const data = await orderService.delete(req.body._id);
+    const data = await orderService.delete(req.params.id);
     return res.status(200).send({
       message: "Order successfully deleted",
       data: data,
