@@ -33,3 +33,8 @@ export interface userUpdate {
   address: string | undefined;
   phone: string | undefined;
 }
+
+export interface DecodeToken {
+  username: string;
+  id: string;
+}
