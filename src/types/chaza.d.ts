@@ -28,13 +28,10 @@ export interface ChazaCreateI {
 }
 
 export interface ChazaUpdateI {
-  _id: mongoose.Types.ObjectId;
-  name: String;
+  owner: mongoose.Types.ObjectId;
   description: String;
-  type: Number;
   address: String;
+  type: Number;
   phone: String;
-  score: Number;
-  image: String;
   payment_method: Number[];
 }

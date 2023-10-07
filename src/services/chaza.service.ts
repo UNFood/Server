@@ -81,8 +81,9 @@ const chazaService = {
   update: async function (newChaza: ChazaUpdateI): Promise<void> {
     //Actualizar la chaza en la base de datos no retorna nada pues
     //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
+    console.log(newChaza);
     const chazaDB = await Chaza.findOneAndUpdate(
-      { owner: newChaza._id },
+      { owner: newChaza.owner },
       newChaza
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");
