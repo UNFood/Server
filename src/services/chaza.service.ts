@@ -2,10 +2,10 @@ import Chaza from "../models/Chaza";
 import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
 
 const chazaService = {
-  get: async function (_id: String): Promise<ChazaI> {
+  get: async function (_id: String): Promise<ChazaI | null> {
     //Consultar en la colección de chazas de la base de datos
     const chazaDB = await Chaza.findOne({ owner: _id }).exec();
-    if (!chazaDB) throw new Error("Chaza not found");
+    if (!chazaDB) return null;
     //Convertir el resultado a un objeto de tipo ChazaI
     let chaza: ChazaI = {
       _id: chazaDB._id,

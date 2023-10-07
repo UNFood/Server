@@ -6,6 +6,7 @@ const chaza = {
   getChaza: async (req: Request, res: Response): Promise<Response> => {
     try {
       const data = await chazaService.get(req.params.id);
+      if (!data) return res.status(200).send({ message: "Chaza not found" });
       return res.status(200).send({
         message: "Chaza successfully retrieved",
         data: data,
