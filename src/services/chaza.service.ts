@@ -54,6 +54,8 @@ const chazaService = {
       phone: chaza.phone,
       products: chaza.products,
       score: chaza.score,
+      image: chaza.image,
+      payment_method: chaza.payment_method,
     });
     if (!newChaza) throw new Error("Error creating chaza");
     //Guardar la chaza en la base de datos
