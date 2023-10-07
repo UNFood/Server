@@ -1,13 +1,12 @@
 // userRoutes.ts
-import { Router } from 'express';
-import { createUser, getUser, updateUser, deleteUser,getAllUsers} from '../controllers/user.controller';
+import { Router } from "express";
+import user from "../controllers/user.controller";
 
 const user_router = Router();
 
-user_router.post('/', createUser);
-user_router.get('/:id', getUser);
-user_router.delete('/:id', deleteUser);
-user_router.get('/', getAllUsers);
-user_router.patch('/:id', updateUser);
+user_router.get("/:id", user.get);
+user_router.get("/users", user.getAll);
+user_router.put("/", user.update);
+user_router.delete("/:id", user.delete);
 
 export default user_router;

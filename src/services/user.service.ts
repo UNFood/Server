@@ -1,55 +1,74 @@
-import User, { IUser } from '../models/User';
+import User from "../models/User";
+import { UserI, userUpdate } from "../types/user";
 
-class UserService {
-  // Crear un nuevo usuario
-  async createUser(userData: IUser): Promise<IUser | null> {
-    try {
-      const user = new User(userData);
-      const savedUser = await user.save();
-      return savedUser;
-    } catch (error) {
-      throw error;
-    }
-  }
+const UserService = {
+  get: async function (_id: string): Promise<UserI> {
+    const userDB = await User.findOne({ _id: _id }).exec();
+    if (!userDB) throw new Error("User not found");
+    let user: UserI = {
+      _id: userDB._id,
+      username: userDB.username,
+      name: userDB.name,
+      lastName: userDB.lastName,
+      email: userDB.email,
+      password: userDB.password,
+      address: userDB.address,
+      phone: userDB.phone,
+    };
+    return user;
+  },
 
-  // Obtener un usuario por su ID
-  async getUserById(userId: string): Promise<IUser | null> {
-    try {
-      const user = await User.findById(userId);
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
+  getAll: async function (): Promise<UserI[]> {
+    const userListDB = await User.find().exec();
+    let users = userListDB.map((user) => ({
+      _id: user._id,
+      username: user.username,
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password,
+      address: user.address,
+      phone: user.phone,
+    }));
+    return users;
+  },
 
-  // Obtener todos los usuarios
-  async getAllUsers(): Promise<IUser[]> {
-    try {
-      const users = await User.find();
-      return users;
-    } catch (error) {
-      throw error;
-    }
-  }
+  update: async function (newUser: userUpdate): Promise<UserI> {
+    const userDB = await User.findByIdAndUpdate(
+      {
+        _id: newUser._id,
+      },
+      newUser
+    );
+    if (!userDB) throw new Error("User not found");
+    let user: UserI = {
+      _id: userDB._id,
+      username: userDB.username,
+      name: userDB.name,
+      lastName: userDB.lastName,
+      email: userDB.email,
+      password: userDB.password,
+      address: userDB.address,
+      phone: userDB.phone,
+    };
+    return user;
+  },
 
-  // Actualizar un usuario por su ID
-  async updateUserById(userId: string, userData: Partial<IUser>): Promise<IUser | null> {
-    try {
-      const user = await User.findByIdAndUpdate(userId, userData, { new: true });
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
+  delete: async function (userId: string): Promise<UserI> {
+    const userDB = await User.findByIdAndDelete(userId);
+    if (!userDB) throw new Error("User not found");
+    let user: UserI = {
+      _id: userDB._id,
+      username: userDB.username,
+      name: userDB.name,
+      lastName: userDB.lastName,
+      email: userDB.email,
+      password: userDB.password,
+      address: userDB.address,
+      phone: userDB.phone,
+    };
+    return user;
+  },
+};
 
-  // Eliminar un usuario por su ID
-  async deleteUserById(userId: string): Promise<void> {
-    try {
-      await User.findByIdAndDelete(userId);
-    } catch (error) {
-      throw error;
-    }
-  }
-}
-
-export default new UserService();
+export default UserService;

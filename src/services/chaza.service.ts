@@ -2,10 +2,10 @@ import Chaza from "../models/Chaza";
 import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
 
 const chazaService = {
-  get: async function (_id: String): Promise<ChazaI> {
+  get: async function (_id: String): Promise<ChazaI | null> {
     //Consultar en la colección de chazas de la base de datos
     const chazaDB = await Chaza.findOne({ owner: _id }).exec();
-    if (!chazaDB) throw new Error("Chaza not found");
+    if (!chazaDB) return null;
     //Convertir el resultado a un objeto de tipo ChazaI
     let chaza: ChazaI = {
       _id: chazaDB._id,
@@ -54,6 +54,8 @@ const chazaService = {
       phone: chaza.phone,
       products: chaza.products,
       score: chaza.score,
+      image: chaza.image,
+      payment_method: chaza.payment_method,
     });
     if (!newChaza) throw new Error("Error creating chaza");
     //Guardar la chaza en la base de datos
@@ -79,8 +81,9 @@ const chazaService = {
   update: async function (newChaza: ChazaUpdateI): Promise<void> {
     //Actualizar la chaza en la base de datos no retorna nada pues
     //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
+    console.log(newChaza);
     const chazaDB = await Chaza.findOneAndUpdate(
-      { owner: newChaza._id },
+      { owner: newChaza.owner },
       newChaza
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");

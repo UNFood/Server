@@ -4,9 +4,9 @@ import * as OrderController from "../controllers/order.controller";
 const router = express.Router();
 
 router.post("/", OrderController.createOrder);
-router.get("/getByUser", OrderController.getByUser);
-router.get("/getByChaza", OrderController.getByChaza);
+router.get("/byUser/:id", OrderController.getByUser);
+router.get("/byChaza/:id", OrderController.getByChaza);
 router.put("/", OrderController.updateOrder);
-router.delete("/", OrderController.deleteOrder);
+router.delete("/:id", OrderController.deleteOrder);
 
 export default router;
