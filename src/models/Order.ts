@@ -15,6 +15,7 @@ const orderSchema = new mongoose.Schema(
         product: {
           ref: "Product",
           type: mongoose.Schema.Types.ObjectId,
+          required: true,
         },
         quantity: {
           type: Number,
@@ -22,13 +23,17 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    state: {
+      type: String,
+      required: true,
+      default: "Pendiente",
+    },
+    time_to_delivery: {
+      type: Date,
+    },
     total: {
       type: Number,
       required: true,
-    },
-    success: {
-      type: Boolean,
-      default: false,
     },
   },
   {

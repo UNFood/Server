@@ -1,20 +1,17 @@
 // routes/product.routes.ts
-import express from 'express';
-import product  from '../controllers/product.controller';
+import express from "express";
+import product from "../controllers/product.controller";
 
 const product_router = express.Router();
 
 //Routes
-product_router.get('/product', product.getProduct);
-product_router.get('/products', product.getAllProducts);
-product_router.post('/createProduct', product.createProduct);
-product_router.put('/updateProduct', product.updateProduct);    
-product_router.delete('/deleteProduct', product.deleteProduct);
-product_router.post('/uploadImage', product.uploadImage);
 
-// product_router.post('/uploadImage', upload.single("file"), (req, res) => {
-//     console.log(req.file)
-//     res.json({message: 'file uploaded'})
-// });
+product_router.get("/:id", product.getProduct);
+product_router.get("/products", product.getAllProducts);
+product_router.post("/", product.createProduct);
+product_router.put("/", product.updateProduct);
+product_router.delete("/", product.deleteProduct);
+product_router.get("/products/filters", product.getProductsByFilters);
+product_router.post('/uploadImage', product.uploadImage);
 
 export default product_router;

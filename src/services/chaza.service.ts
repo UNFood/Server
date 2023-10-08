@@ -1,68 +1,133 @@
-// chazaService.ts
+import Chaza from "../models/Chaza";
+import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
 
-import Chaza from '../models/Chaza'; // Importa el modelo de Chaza
-import { Request, Response } from 'express';
+const chazaService = {
+  get: async function (_id: String): Promise<ChazaI | null> {
+    //Consultar en la colección de chazas de la base de datos
+    const chazaDB = await Chaza.findOne({ owner: _id }).exec();
+    if (!chazaDB) return null;
+    //Convertir el resultado a un objeto de tipo ChazaI
+    let chaza: ChazaI = {
+      _id: chazaDB._id,
+      owner: chazaDB.owner,
+      name: chazaDB.name,
+      description: chazaDB.description,
+      type: chazaDB.type,
+      address: chazaDB.address,
+      phone: chazaDB.phone,
+      products: chazaDB.products,
+      score: chazaDB.score,
+      image: chazaDB.image,
+      payment_method: chazaDB.payment_method,
+    };
+    //Retornar la chaza
+    return chaza;
+  },
+  getAll: async function (): Promise<ChazaI[]> {
+    //Consultar la colección de chazas de la base de datos
+    const chazaListDB = await Chaza.find().exec();
+    //Convertir el resultado a un arreglo de objetos de tipo ChazaI
+    let chazas = chazaListDB.map((chaza) => ({
+      _id: chaza._id,
+      owner: chaza.owner,
+      name: chaza.name,
+      description: chaza.description,
+      type: chaza.type,
+      address: chaza.address,
+      phone: chaza.phone,
+      products: chaza.products,
+      score: chaza.score,
+      image: chaza.image,
+      payment_method: chaza.payment_method,
+    }));
+    //Retornar el arreglo de chazas
+    return chazas;
+  },
+  create: async function (chaza: ChazaCreateI): Promise<ChazaI> {
+    //Crear una nueva chaza que va a ser guardado en la base de datos
+    let newChaza = new Chaza({
+      owner: chaza.owner,
+      name: chaza.name,
+      description: chaza.description,
+      type: chaza.type,
+      address: chaza.address,
+      phone: chaza.phone,
+      products: chaza.products,
+      score: chaza.score,
+      image: chaza.image,
+      payment_method: chaza.payment_method,
+    });
+    if (!newChaza) throw new Error("Error creating chaza");
+    //Guardar la chaza en la base de datos
+    let result = await newChaza.save();
+    if (!result) throw new Error("Error saving chaza");
+    //Convertir el resultado a un objeto de tipo ChazaI
+    let data: ChazaI = {
+      _id: result._id,
+      owner: result.owner,
+      name: result.name,
+      description: result.description,
+      type: result.type,
+      address: result.address,
+      phone: result.phone,
+      products: result.products,
+      score: result.score,
+      image: result.image,
+      payment_method: result.payment_method,
+    };
+    //Retornar la chaza creada
+    return data;
+  },
+  update: async function (newChaza: ChazaUpdateI): Promise<void> {
+    //Actualizar la chaza en la base de datos no retorna nada pues
+    //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
+    console.log(newChaza);
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: newChaza.owner },
+      newChaza
+    ).exec();
+    if (!chazaDB) throw new Error("Error updating chaza");
+  },
+  delete: async function (_id: String): Promise<ChazaI> {
+    //Eliminar la chaza de la base de datos
+    const chazaDB = await Chaza.findOneAndDelete({ owner: _id }).exec();
+    if (!chazaDB) throw new Error("Error deleting chaza");
+    //Convertir el resultado a un objeto de tipo ChazaI
+    let deleteChaza: ChazaI = {
+      _id: chazaDB._id,
+      owner: chazaDB.owner,
+      name: chazaDB.name,
+      description: chazaDB.description,
+      type: chazaDB.type,
+      address: chazaDB.address,
+      phone: chazaDB.phone,
+      products: chazaDB.products,
+      score: chazaDB.score,
+      image: chazaDB.image,
+      payment_method: chazaDB.payment_method,
+    };
+    //Retornar el objeto eliminado
+    return deleteChaza;
+  },
+  addProduct: async function (
+    chaza_id: String | undefined,
+    product_id: String
+  ) {
+    //Agregar el producto a la chaza
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: chaza_id },
+      { $push: { products: product_id } }
+    ).exec();
+    if (!chazaDB) throw new Error("Error adding product to chaza");
+  },
+  deleteProduct: async function (chaza_id: String, product_id: String) {
+    //Eliminar el producto de la chaza
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: chaza_id },
+      { $pull: { products: product_id } }
+    ).exec();
+    if (!chazaDB) throw new Error("Error deleting product from chaza");
+  },
+};
 
-class ChazaService {
-  // Crea una nueva chaza
-  async crearChaza(req: Request, res: Response) {
-    try {
-      const nuevaChaza = new Chaza(req.body);
-      await nuevaChaza.save();
-      res.status(201).json(nuevaChaza);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-  }
-
-  // Obtiene todas las chazas
-  async obtenerChazas(req: Request, res: Response) {
-    try {
-      const chazas = await Chaza.find();
-      res.status(200).json(chazas);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-  }
-
-  // Obtiene una chaza por su ID
-  async obtenerChazaPorId(req: Request, res: Response) {
-    try {
-      const chaza = await Chaza.findById(req.params.id);
-      if (!chaza) {
-        return res.status(404).json({ message: 'Chaza no encontrada' });
-      }
-      res.status(200).json(chaza);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-  }
-
-  // Actualiza una chaza por su ID
-  async actualizarChaza(req: Request, res: Response) {
-    try {
-      const chaza = await Chaza.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (!chaza) {
-        return res.status(404).json({ message: 'Chaza no encontrada' });
-      }
-      res.status(200).json(chaza);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-  }
-
-  // Elimina una chaza por su ID
-  async eliminarChaza(req: Request, res: Response) {
-    try {
-      const chaza = await Chaza.findByIdAndDelete(req.params.id);
-      if (!chaza) {
-        return res.status(404).json({ message: 'Chaza no encontrada' });
-      }
-      res.status(200).json({ message: 'Chaza eliminada exitosamente' });
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-  }
-}
-
-export default ChazaService;
+export default chazaService;
