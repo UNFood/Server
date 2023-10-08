@@ -29,8 +29,15 @@ const chaza = {
   },
   //Route: POST /createChaza
   createChaza: async (req: Request, res: Response): Promise<Response> => {
+
     try {
-      const data = await chazaService.create(req.body);
+          chazaService.uploadImage.single("image")(req, res, (err) => {
+      if (err) {
+        console.log("failed")
+      }
+      console.log(req.body.file);
+    })
+      const data = await chazaService.create(req.body, req.body.file);
       return res.status(200).send({
         message: "Chaza successfully created",
         data: { data },
