@@ -32,7 +32,13 @@ const product = {
   //Route: POST /createProduct
   createProduct: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await productService.create(req.body);
+      if (req.file === undefined)
+      return res.status(400).send({ message: "No file uploaded" });
+
+      const data = await productService.create(
+        req.body,
+        (req.file as Express.MulterS3.File).location  
+      );
       return res.status(200).send({
         message: "Product successfully created",
         data: { data },
@@ -64,20 +70,6 @@ const product = {
       return res.status(400).send({ message: error.message });
     }
   },  
-  //Route: POST /uploadImage
-  uploadImage: (req: Request, res: Response) => {
-    productService.uploadImage.single('file')(req, res, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(400).json({ message: 'File upload failed' });
-      }
-      console.log(req.file);
-      return res.status(200).send({
-        message: "Image successfully uploaded",
-      });
-
-    });
-  },
 
   //ROUTE: GET /products/filters
   getProductsByFilters: async (

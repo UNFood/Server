@@ -43,7 +43,7 @@ const productService = {
     //Retornar el arreglo de productos
     return products;
   },
-  create: async function (product: ProductCreateI): Promise<ProductCreateI> {
+  create: async function (product: ProductCreateI, image: string): Promise<ProductCreateI> {
     //Crear un nuevo producto que va a ser guardado en la base de datos
     let newProduct = new Product({
       name: product.name,
@@ -51,7 +51,7 @@ const productService = {
       category: product.category,
       price: product.price,
       stock: product.stock,
-      image: product.image,
+      image: image,
       total_sales: product.total_sales,
     });
     if (!newProduct) throw new Error("Error creating product");
@@ -121,17 +121,6 @@ const productService = {
     return deleteProduct;
   },
 
-  uploadImage: multer({
-    storage: multerS3({
-        s3: s3Config,
-        bucket: "unfood",
-        contentType: multerS3.AUTO_CONTENT_TYPE,
-        key: function (req, file, cb) {
-            cb(null, Date.now().toString())
-        }
-    })
-}),
-
   getByFilters: async function (
     priceOrder: Number,
     priceRange: Number[],
@@ -158,6 +147,16 @@ const productService = {
     //Retornar el arreglo de productos
     return productsFiltered;
   },
+  uploadImage: multer({
+    storage: multerS3({
+      s3: s3Config,
+      bucket: "unfood",
+      contentType: multerS3.AUTO_CONTENT_TYPE,
+      key: function (req, file, cb) {
+        cb(null, Date.now().toString());
+      },
+    }),
+  }),
 };
 
 export default productService;
