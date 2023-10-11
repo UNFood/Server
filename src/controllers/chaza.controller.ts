@@ -27,20 +27,18 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
-  uploadImage: (req: Request, res: Response) => {
-    chazaService.uploadImage.single("image")(req, res, (err) => {
-      if (err) {
-        console.error(err);
-      }
-      console.log(req.files);
-    });
-  },
   //Route: POST /createChaza
   createChaza: async (req: Request, res: Response): Promise<Response> => {
     try {
-      console.log(req.files);
-      chaza.uploadImage(req, res);
-      const data = await chazaService.create(req.body, req.body.name);
+      //console.log(req.file);
+      if (req.file === undefined)
+        return res.status(400).send({ message: "No file uploaded" });
+
+      //chaza.uploadImage(req, res);
+      const data = await chazaService.create(
+        req.body,
+        (req.file as Express.MulterS3.File).location
+      );
       //console.log(data);
       return res.status(200).send({
         message: "Chaza successfully created",
