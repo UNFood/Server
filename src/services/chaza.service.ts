@@ -1,5 +1,5 @@
 import Chaza from "../models/Chaza";
-import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
+import { ChazaI, ChazaCreateI, ChazaUpdateI, Location } from "../types/chaza";
 
 const chazaService = {
   get: async function (_id: String): Promise<ChazaI | null> {
@@ -19,6 +19,7 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      location: chazaDB.location || { latitude: 0, longitude: 0 },
     };
     //Retornar la chaza
     return chaza;
@@ -39,6 +40,7 @@ const chazaService = {
       score: chaza.score,
       image: chaza.image,
       payment_method: chaza.payment_method,
+      location: chaza.location || { latitude: 0, longitude: 0 },
     }));
     //Retornar el arreglo de chazas
     return chazas;
@@ -56,6 +58,7 @@ const chazaService = {
       score: chaza.score,
       image: chaza.image,
       payment_method: chaza.payment_method,
+      location: chaza.location,
     });
     if (!newChaza) throw new Error("Error creating chaza");
     //Guardar la chaza en la base de datos
@@ -74,6 +77,7 @@ const chazaService = {
       score: result.score,
       image: result.image,
       payment_method: result.payment_method,
+      location: result.location || { latitude: 0, longitude: 0 },
     };
     //Retornar la chaza creada
     return data;
@@ -105,6 +109,7 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      location: chazaDB.location || { latitude: 0, longitude: 0 }, 
     };
     //Retornar el objeto eliminado
     return deleteChaza;
@@ -127,6 +132,31 @@ const chazaService = {
       { $pull: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error deleting product from chaza");
+  },
+  updateLocation: async function (chazaId: String, location: { latitude: number, longitude: number }): Promise<ChazaI | null> {
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: chazaId },
+      { location: location || { latitude: 0, longitude: 0 } },
+      { new: true }
+    ).exec();
+
+    if (!chazaDB) return null;
+
+    let updatedChaza: ChazaI = {
+      _id: chazaDB._id,
+      owner: chazaDB.owner,
+      name: chazaDB.name,
+      description: chazaDB.description,
+      type: chazaDB.type,
+      address: chazaDB.address,
+      phone: chazaDB.phone,
+      products: chazaDB.products,
+      score: chazaDB.score,
+      image: chazaDB.image,
+      payment_method: chazaDB.payment_method,
+      location: chazaDB.location || { latitude: 0, longitude: 0 },   
+    };
+    return updatedChaza;
   },
 };
 

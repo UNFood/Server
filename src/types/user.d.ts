@@ -1,4 +1,11 @@
 import mongoose from "mongoose";
+
+export interface Location {
+  latitude: number;
+  longitude: number;
+}
+
+
 export interface UserI {
   _id: mongoose.Types.ObjectId;
   username: string | undefined;
@@ -8,6 +15,7 @@ export interface UserI {
   password: string;
   address: string | undefined;
   phone: string | undefined;
+  location: Location; 
 }
 
 export interface UserRegister {
@@ -16,6 +24,7 @@ export interface UserRegister {
   lastName: string;
   email: string;
   password: string;
+  location: Location; 
 }
 
 export interface UserLogin {
@@ -32,6 +41,7 @@ export interface userUpdate {
   password: string;
   address: string | undefined;
   phone: string | undefined;
+  location: Location; 
 }
 
 export interface DecodeToken {

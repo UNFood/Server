@@ -48,6 +48,24 @@ const user = {
       res.status(400).json({ message: error.message });
     }
   },
+  updateLocation: async (req: Request, res: Response) => {
+    try {
+      const { latitude, longitude } = req.body;
+      const userId = req.params.id;
+      const updatedUser = await UserService.updateLocation(userId, { latitude, longitude });
+
+      if (!updatedUser) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+
+      return res.status(200).send({
+        message: "User location successfully updated",
+        data: updatedUser,
+      });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  },
 };
 
 export default user;

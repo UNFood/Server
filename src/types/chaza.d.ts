@@ -1,5 +1,10 @@
 import mongoose, { StringExpressionOperatorReturningBoolean } from "mongoose";
 
+export interface Location {
+  latitude: number;
+  longitude: number;
+}
+
 export interface ChazaI {
   _id: mongoose.Types.ObjectId;
   owner: mongoose.Types.ObjectId | undefined;
@@ -12,6 +17,7 @@ export interface ChazaI {
   score: Number;
   image: String | undefined;
   payment_method: Number[];
+  location: Location;
 }
 
 export interface ChazaCreateI {
@@ -25,6 +31,7 @@ export interface ChazaCreateI {
   score: Number;
   image: String;
   payment_method: Number[];
+  location: Location;
 }
 
 export interface ChazaUpdateI {
@@ -34,4 +41,5 @@ export interface ChazaUpdateI {
   type: Number;
   phone: String;
   payment_method: Number[];
+  location: Location;
 }

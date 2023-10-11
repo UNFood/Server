@@ -14,6 +14,7 @@ const UserService = {
       password: userDB.password,
       address: userDB.address,
       phone: userDB.phone,
+      location: userDB.location || { latitude: 0, longitude: 0 },
     };
     return user;
   },
@@ -29,6 +30,7 @@ const UserService = {
       password: user.password,
       address: user.address,
       phone: user.phone,
+      location: user.location || { latitude: 0, longitude: 0 },
     }));
     return users;
   },
@@ -50,6 +52,7 @@ const UserService = {
       password: userDB.password,
       address: userDB.address,
       phone: userDB.phone,
+      location: userDB.location || { latitude: 0, longitude: 0 },
     };
     return user;
   },
@@ -66,9 +69,34 @@ const UserService = {
       password: userDB.password,
       address: userDB.address,
       phone: userDB.phone,
+      location: userDB.location || { latitude: 0, longitude: 0 },
     };
     return user;
   },
+
+  updateLocation: async function (userId: string, location: { latitude: number, longitude: number }): Promise<UserI> {
+    const userDB = await User.findByIdAndUpdate(
+      userId,
+      { location },
+      { new: true }
+    );
+
+    if (!userDB) throw new Error("User not found");
+
+    let user: UserI = {
+      _id: userDB._id,
+      username: userDB.username,
+      name: userDB.name,
+      lastName: userDB.lastName,
+      email: userDB.email,
+      password: userDB.password,
+      address: userDB.address,
+      phone: userDB.phone,
+      location: userDB.location || { latitude: 0, longitude: 0 },
+    };
+    return user;
+  },
+
 };
 
 export default UserService;

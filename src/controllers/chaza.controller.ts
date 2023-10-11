@@ -63,6 +63,25 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
+  updateChazaLocation: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { latitude, longitude } = req.body;
+      const chazaId = req.params.id;
+      const updatedChaza = await chazaService.updateLocation(chazaId, { latitude, longitude });
+
+      if (!updatedChaza) {
+        return res.status(404).send({ message: 'Chaza not found' });
+      }
+
+      return res.status(200).send({
+        message: "Chaza location successfully updated",
+        data: updatedChaza,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
+
 };
 
 export default chaza;

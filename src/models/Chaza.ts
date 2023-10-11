@@ -2,6 +2,16 @@ import mongoose from "mongoose";
 
 const chazaSchema = new mongoose.Schema(
   {
+    location: {
+      latitude: {
+        type: Number,
+        required: true,
+      },
+      longitude: {
+        type: Number,
+        required: true,
+      },
+    },
     owner: {
       ref: "User",
       type: mongoose.Schema.Types.ObjectId,
