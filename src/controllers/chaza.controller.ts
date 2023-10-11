@@ -28,7 +28,7 @@ const chaza = {
     }
   },
   uploadImage: (req: Request, res: Response) => {
-    chazaService.uploadImage.single('image')(req, res, (err) => {
+    chazaService.uploadImage.single("image")(req, res, (err) => {
       if (err) {
         console.error(err);
       }
@@ -38,10 +38,10 @@ const chaza = {
   //Route: POST /createChaza
   createChaza: async (req: Request, res: Response): Promise<Response> => {
     try {
-      console.log(req);
-      chaza.uploadImage(req, res)
+      console.log(req.files);
+      chaza.uploadImage(req, res);
       const data = await chazaService.create(req.body, req.body.name);
-      console.log(data)
+      //console.log(data);
       return res.status(200).send({
         message: "Chaza successfully created",
         data: { data },
@@ -73,7 +73,7 @@ const chaza = {
     } catch (error: any) {
       return res.status(400).send({ message: error.message });
     }
-  }, 
-}
+  },
+};
 
 export default chaza;
