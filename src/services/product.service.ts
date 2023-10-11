@@ -157,6 +157,25 @@ const productService = {
       },
     }),
   }),
+
+  getProductsList: async function (products: String[]): Promise<ProductI[]> {
+    const query = {
+      _id: { $in: products },
+    };
+    const productList= await Product.find(query).exec();
+
+    let productsList: ProductI[] = productList.map((product) => ({
+      _id: product._id,
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      stock: product.stock,
+      image: product.image,
+      total_sales: product.total_sales,
+    }));
+    return productsList;
+  }
 };
 
 export default productService;

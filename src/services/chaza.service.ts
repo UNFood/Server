@@ -2,15 +2,19 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import Chaza from "../models/Chaza";
 import { s3Config } from "../config/s3";
-import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
+import { ChazaI, ChazaCreateI, ChazaUpdateI, ChazaReadI } from "../types/chaza";
+import productService from "./product.service";
+
 
 const chazaService = {
-  get: async function (_id: String): Promise<ChazaI | null> {
+  get: async function (_id: String): Promise<ChazaReadI | null> {
     //Consultar en la colección de chazas de la base de datos
     const chazaDB = await Chaza.findOne({ owner: _id }).exec();
     if (!chazaDB) return null;
+    const products = await productService.getProductsList(chazaDB.products.map((product) => product._id.toString()));
+    
     //Convertir el resultado a un objeto de tipo ChazaI
-    let chaza: ChazaI = {
+    let chaza: ChazaReadI = {
       _id: chazaDB._id,
       owner: chazaDB.owner,
       name: chazaDB.name,
@@ -18,7 +22,7 @@ const chazaService = {
       type: chazaDB.type,
       address: chazaDB.address,
       phone: chazaDB.phone,
-      products: chazaDB.products,
+      products: products,
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
