@@ -30,6 +30,29 @@ const chazaService = {
     //Retornar la chaza
     return chaza;
   },
+  getByName: async function (name: String): Promise<ChazaReadI | null> {
+    //Consultar en la colección de chazas de la base de datos
+    const chazaDB = await Chaza.findOne({ name: name }).exec();
+    if (!chazaDB) return null;
+    const products = await productService.getProductsList(chazaDB.products.map((product) => product._id.toString()));
+    
+    //Convertir el resultado a un objeto de tipo ChazaI
+    let chaza: ChazaReadI = {
+      _id: chazaDB._id,
+      owner: chazaDB.owner,
+      name: chazaDB.name,
+      description: chazaDB.description,
+      type: chazaDB.type,
+      address: chazaDB.address,
+      phone: chazaDB.phone,
+      products: products,
+      score: chazaDB.score,
+      image: chazaDB.image,
+      payment_method: chazaDB.payment_method,
+    };
+    //Retornar la chaza
+    return chaza;
+  },
   getAll: async function (): Promise<ChazaI[]> {
     //Consultar la colección de chazas de la base de datos
     const chazaListDB = await Chaza.find().exec();
