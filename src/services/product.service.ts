@@ -1,5 +1,9 @@
 import { query } from "express";
 import Product from "../models/Product";
+
+import multer from "multer";
+import multerS3 from "multer-s3";
+import {s3Config} from "../config/s3"
 import { ProductCreateI, ProductI } from "../types/product";
 import chazaService from "./chaza.service";
 
@@ -39,7 +43,7 @@ const productService = {
     //Retornar el arreglo de productos
     return products;
   },
-  create: async function (product: ProductCreateI): Promise<ProductCreateI> {
+  create: async function (product: ProductCreateI, image: string): Promise<ProductCreateI> {
     //Crear un nuevo producto que va a ser guardado en la base de datos
     let newProduct = new Product({
       name: product.name,
@@ -47,7 +51,7 @@ const productService = {
       category: product.category,
       price: product.price,
       stock: product.stock,
-      image: product.image,
+      image: image,
       total_sales: product.total_sales,
     });
     if (!newProduct) throw new Error("Error creating product");
@@ -116,6 +120,7 @@ const productService = {
     //Retornar el objeto eliminado
     return deleteProduct;
   },
+
   getByFilters: async function (
     priceOrder: Number,
     priceRange: Number[],
@@ -142,6 +147,16 @@ const productService = {
     //Retornar el arreglo de productos
     return productsFiltered;
   },
+  uploadImage: multer({
+    storage: multerS3({
+      s3: s3Config,
+      bucket: "unfood",
+      contentType: multerS3.AUTO_CONTENT_TYPE,
+      key: function (req, file, cb) {
+        cb(null, Date.now().toString());
+      },
+    }),
+  }),
 };
 
 export default productService;
