@@ -1,4 +1,7 @@
+import multer from "multer";
+import multerS3 from "multer-s3";
 import Chaza from "../models/Chaza";
+import { s3Config } from "../config/s3";
 import { ChazaI, ChazaCreateI, ChazaUpdateI } from "../types/chaza";
 
 const chazaService = {
@@ -43,7 +46,7 @@ const chazaService = {
     //Retornar el arreglo de chazas
     return chazas;
   },
-  create: async function (chaza: ChazaCreateI): Promise<ChazaI> {
+  create: async function (chaza: ChazaCreateI, image: string): Promise<ChazaI> {
     //Crear una nueva chaza que va a ser guardado en la base de datos
     let newChaza = new Chaza({
       owner: chaza.owner,
@@ -54,7 +57,7 @@ const chazaService = {
       phone: chaza.phone,
       products: chaza.products,
       score: chaza.score,
-      image: chaza.image,
+      image: image,
       payment_method: chaza.payment_method,
     });
     if (!newChaza) throw new Error("Error creating chaza");
@@ -128,6 +131,16 @@ const chazaService = {
     ).exec();
     if (!chazaDB) throw new Error("Error deleting product from chaza");
   },
+  uploadImage: multer({
+    storage: multerS3({
+      s3: s3Config,
+      bucket: "unfood",
+      contentType: multerS3.AUTO_CONTENT_TYPE,
+      key: function (req, file, cb) {
+        cb(null, Date.now().toString());
+      },
+    }),
+  }),
 };
 
 export default chazaService;
