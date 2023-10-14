@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 export interface ProductI {
   _id: mongoose.Types.ObjectId;
   name: String;
+  name_chaza: String;
   description: String;
   price: Number;
   image: String;
