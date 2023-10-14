@@ -1,6 +1,7 @@
 // chazaRoutes.ts
 import { Router } from "express";
 import chaza from "../controllers/chaza.controller";
+import product from "../controllers/product.controller";
 import chazaService from "../services/chaza.service";
 import { verifyTokenChaza } from "../middlewares/verify";
 
