@@ -1,6 +1,7 @@
 // chazaRoutes.ts
 import { Router } from "express";
 import chaza from "../controllers/chaza.controller";
+import product from "../controllers/product.controller";
 import chazaService from "../services/chaza.service";
 
 const chaza_router = Router();
@@ -14,6 +15,8 @@ chaza_router.post(
   chazaService.uploadImage.single("image"),
   chaza.createChaza
 );
+chaza_router.get("/products", product.getAllProducts);
+
 chaza_router.put("/", chaza.updateChaza);
 chaza_router.delete("/:id", chaza.deleteChaza);
 
