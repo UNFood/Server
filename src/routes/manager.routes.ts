@@ -4,7 +4,7 @@ import user_router from "./user.routes";
 import chaza_router from "./chaza.routes";
 import auth_router from "./auth.routes";
 import order_router from "./order.routes";
-import verifyToken from "../middlewares/verify";
+import { verifyToken } from "../middlewares/verify";
 
 const router_manager = Router();
 

@@ -5,14 +5,15 @@ import { s3Config } from "../config/s3";
 import { ChazaI, ChazaCreateI, ChazaUpdateI, ChazaReadI } from "../types/chaza";
 import productService from "./product.service";
 
-
 const chazaService = {
   get: async function (_id: String): Promise<ChazaReadI | null> {
     //Consultar en la colección de chazas de la base de datos
     const chazaDB = await Chaza.findOne({ owner: _id }).exec();
     if (!chazaDB) return null;
-    const products = await productService.getProductsList(chazaDB.products.map((product) => product._id.toString()));
-    
+    const products = await productService.getProductsList(
+      chazaDB.products.map((product) => product._id.toString())
+    );
+
     //Convertir el resultado a un objeto de tipo ChazaI
     let chaza: ChazaReadI = {
       _id: chazaDB._id,
@@ -34,8 +35,10 @@ const chazaService = {
     //Consultar en la colección de chazas de la base de datos
     const chazaDB = await Chaza.findOne({ name: name }).exec();
     if (!chazaDB) return null;
-    const products = await productService.getProductsList(chazaDB.products.map((product) => product._id.toString()));
-    
+    const products = await productService.getProductsList(
+      chazaDB.products.map((product) => product._id.toString())
+    );
+
     //Convertir el resultado a un objeto de tipo ChazaI
     let chaza: ChazaReadI = {
       _id: chazaDB._id,
@@ -74,6 +77,8 @@ const chazaService = {
     return chazas;
   },
   create: async function (chaza: ChazaCreateI, image: string): Promise<ChazaI> {
+    const chazaExist = await this.getByName(chaza.name);
+    if (chazaExist) throw new Error("Chaza already exist");
     //Crear una nueva chaza que va a ser guardado en la base de datos
     let newChaza = new Chaza({
       owner: chaza.owner,

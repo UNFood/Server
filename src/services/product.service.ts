@@ -1,21 +1,20 @@
-import { query } from "express";
 import Product from "../models/Product";
-
 import multer from "multer";
 import multerS3 from "multer-s3";
-import {s3Config} from "../config/s3"
+import { s3Config } from "../config/s3";
 import { ProductCreateI, ProductI } from "../types/product";
 import chazaService from "./chaza.service";
 
 const productService = {
-  get: async function (_id: String): Promise<ProductI> {
+  get: async function (_id: string): Promise<ProductI> {
     //Consultar en la colección de productos de la base de datos
-    const productDB = await Product.findOne({ _id: _id }).exec();
+    const productDB = await Product.findById(_id).exec();
     if (!productDB) throw new Error("Product not found");
     //Convertir el resultado a un objeto de tipo ProductI
     let product: ProductI = {
       _id: productDB._id,
       name: productDB.name,
+      name_chaza: productDB.name_chaza,
       description: productDB.description,
       category: productDB.category,
       price: productDB.price,
@@ -33,6 +32,7 @@ const productService = {
     let products = productListDB.map((product) => ({
       _id: product._id,
       name: product.name,
+      name_chaza: product.name_chaza,
       description: product.description,
       category: product.category,
       price: product.price,
@@ -43,10 +43,17 @@ const productService = {
     //Retornar el arreglo de productos
     return products;
   },
-  create: async function (product: ProductCreateI, image: string): Promise<ProductCreateI> {
+  create: async function (
+    product: ProductCreateI,
+    image: string
+  ): Promise<ProductCreateI> {
+    const chaza = await chazaService.get(product.chaza_id.toString());
+    if (!chaza) throw new Error("Chaza not found");
+
     //Crear un nuevo producto que va a ser guardado en la base de datos
     let newProduct = new Product({
       name: product.name,
+      name_chaza: chaza.name,
       description: product.description,
       category: product.category,
       price: product.price,
@@ -82,7 +89,7 @@ const productService = {
   update: async function (newProduct: ProductI): Promise<ProductI> {
     //Actualizar el producto en la base de datos
     const productDB = await Product.findOneAndUpdate(
-      { name: newProduct.name },
+      { _id: newProduct._id },
       newProduct
     ).exec();
     if (!productDB) throw new Error("Error updating product");
@@ -90,6 +97,7 @@ const productService = {
     let updateProduct: ProductI = {
       _id: productDB._id,
       name: productDB.name,
+      name_chaza: productDB.name_chaza,
       description: productDB.description,
       category: productDB.category,
       price: productDB.price,
@@ -108,6 +116,7 @@ const productService = {
     let deleteProduct: ProductI = {
       _id: productDB._id,
       name: productDB.name,
+      name_chaza: productDB.name_chaza,
       description: productDB.description,
       category: productDB.category,
       price: productDB.price,
@@ -131,12 +140,13 @@ const productService = {
       category: { $in: category },
     };
     const productListDB = await Product.find(query)
-      .sort({ price: priceOrder===1?"ascending":"descending"})
+      .sort({ price: priceOrder === 1 ? "ascending" : "descending" })
       .exec();
     //Convertir el resultado a un arreglo de objetos de tipo ProductI
     let productsFiltered = productListDB.map((product) => ({
       _id: product._id,
       name: product.name,
+      name_chaza: product.name_chaza,
       description: product.description,
       category: product.category,
       price: product.price,
@@ -162,11 +172,12 @@ const productService = {
     const query = {
       _id: { $in: products },
     };
-    const productList= await Product.find(query).exec();
+    const productList = await Product.find(query).exec();
 
     let productsList: ProductI[] = productList.map((product) => ({
       _id: product._id,
       name: product.name,
+      name_chaza: product.name_chaza,
       description: product.description,
       category: product.category,
       price: product.price,
@@ -175,7 +186,7 @@ const productService = {
       total_sales: product.total_sales,
     }));
     return productsList;
-  }
+  },
 };
 
 export default productService;
