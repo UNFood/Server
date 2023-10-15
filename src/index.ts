@@ -4,14 +4,12 @@ import { initializeProducts } from "./utils/product.initializer";
 import { initializeUsers } from "./utils/userInitializer";
 import { initializeChazas } from "./utils/chaza.initializer";
 import "dotenv/config";
-//import chazaRoutes from './routes/chaza.routes';
 
 const PORT = process.env.SERVER_PORT ?? 3000;
 
 app.listen(PORT);
 
 console.log("server listen on port", PORT);
-//app.use('/chaza', chazaRoutes);
 // No descomentar estas lineas si no se quiere que se inicialicen los datos
 // si descomenta las lineas, se inicializaran los datos cada vez que se inicie el servidor
 // por tanto las id que estan en los data json cambiaran
