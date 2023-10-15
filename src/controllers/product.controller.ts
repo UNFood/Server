@@ -19,13 +19,13 @@ const product = {
   //Route: GET /products
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
-      console.log("get");
       const data = await productService.getAll();
       return res.status(200).send({
         message: "Products successfully retrieved",
         data: data,
       });
     } catch (error: any) {
+      console.log("kely pero k monda");
       return res.status(400).send({ message: error.message });
     }
   },
@@ -33,11 +33,11 @@ const product = {
   createProduct: async (req: Request, res: Response): Promise<Response> => {
     try {
       if (req.file === undefined)
-      return res.status(400).send({ message: "No file uploaded" });
+        return res.status(400).send({ message: "No file uploaded" });
 
       const data = await productService.create(
         req.body,
-        (req.file as Express.MulterS3.File).location  
+        (req.file as Express.MulterS3.File).location
       );
       return res.status(200).send({
         message: "Product successfully created",
@@ -69,7 +69,7 @@ const product = {
     } catch (error: any) {
       return res.status(400).send({ message: error.message });
     }
-  },  
+  },
 
   //ROUTE: GET /products/filters
   getProductsByFilters: async (
