@@ -1,18 +1,31 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
-
-const MONGO_USERNAME = process.env.MONGO_USERNAME || ''; //This for ts to understand that this is a string and not a null
-const MONGO_PASSWORD = process.env.MONGO_PASSWORD || '';
-const MONGO_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.gsygyvk.mongodb.net/?retryWrites=true&w=majority`;
-
-const SERVER_PORT = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 1337;
+//MONGO
+const MONGO_USERNAME = process.env.MONGO_USERNAME || "";
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD || "";
+const MONGO_HOST = process.env.MONGO_HOST || "";
+const SERVER_PORT = process.env.SERVER_PORT ?? 3000;
+const MONGO_URL = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}`;
+//AWS
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME || "";
+const AWS_BUCKET_REGION = process.env.AWS_BUCKET_REGION || "";
+const AWS_PUBLIC_KEY = process.env.AWS_PUBLIC_KEY || "";
+const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY || "";
 
 export const config = {
-    mongo: {
-        url: MONGO_URL
-    },
-    server: {
-        port: SERVER_PORT
-    }
-}
+  mongo: {
+    username: MONGO_USERNAME,
+    password: MONGO_PASSWORD,
+    url: MONGO_URL,
+  },
+  server: {
+    port: SERVER_PORT,
+  },
+  aws: {
+    bucket_name: AWS_BUCKET_NAME,
+    bucket_region: AWS_BUCKET_REGION,
+    public_key: AWS_PUBLIC_KEY,
+    secret_key: AWS_SECRET_KEY,
+  },
+};

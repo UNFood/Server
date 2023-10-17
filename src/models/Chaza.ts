@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const chazaSchema = new mongoose.Schema(
   {
+    owner: {
+      ref: "User",
+      type: mongoose.Schema.Types.ObjectId,
+    },
     name: {
       type: String,
       required: true,
@@ -26,6 +30,19 @@ const chazaSchema = new mongoose.Schema(
       {
         ref: "Product",
         type: mongoose.Schema.Types.ObjectId,
+      },
+    ],
+    score: {
+      type: Number,
+      default: -1,
+    },
+    image: {
+      type: String,
+      requried: true,
+    },
+    payment_method: [
+      {
+        type: Number,
       },
     ],
   },

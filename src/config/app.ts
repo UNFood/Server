@@ -1,18 +1,25 @@
 import express from "express";
 import cors from "cors";
-import routes from '../routes/routes';
+import bodyParser from "body-parser";
+import { Router } from "express";
+import router_manager from "../routes/manager.routes";
+
 // import routes...
 
 const app = express();
+const router = Router();
 
+app.use(express.static("public"));
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use(express.json()); // for parsing application/json
-app.use('/api', routes);
+app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
-app.get("/", (_, res) => {
+app.get("/", (req, res) => {
   res.send("api version 1 en desarrollo ...");
 });
 
 // routes
+
+app.use("/api", router_manager);
 
 export default app;
