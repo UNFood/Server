@@ -1,5 +1,4 @@
 import express from "express";
-import serverless from "serverless-http";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { Router } from "express";
@@ -15,15 +14,13 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
 app.use(express.json({ limit: "50mb" }));
 
-app.get("/home", (req, res) => {
+app.get("/", (req, res) => {
   res.send("api version 1 en desarrollo ...");
 });
 
 // routes
 
 app.use("/api", router_manager);
-
-module.exports.handler = serverless(app);
 
 export default app;
 
