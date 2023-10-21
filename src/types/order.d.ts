@@ -17,9 +17,8 @@ export interface orderI {
 
 export interface orderCreateI {
   user: mongoose.Types.ObjectId | undefined;
-  chaza: mongoose.Types.ObjectId | undefined;
+  chaza: String;
   products: Array<productsOrder>;
-  state: String;
   time_to_delivery: Date | undefined;
   total: Number;
 }

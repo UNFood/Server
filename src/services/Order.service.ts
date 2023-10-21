@@ -1,9 +1,10 @@
 import Order from "../models/Order";
+import Chaza from "../models/Chaza";
 import { orderI, orderCreateI, orderUpdateI } from "../types/order";
 
 const orderService = {
-  getByChaza: async function (id_chaza: String): Promise<orderI[]> {
-    const orderDB = await Order.find({ chaza: id_chaza }).exec();
+  getByChaza: async function (chaza_id: String): Promise<orderI[]> {
+    const orderDB = await Order.find({ chaza: chaza_id }).exec();
     if (!orderDB) throw new Error("Orders not found");
     let orders = orderDB.map((order) => ({
       _id: order._id,
@@ -31,11 +32,13 @@ const orderService = {
     return orders;
   },
   create: async function (order: orderCreateI): Promise<orderI> {
+    const chaza = await Chaza.findOne({ name: order.chaza }).exec();
+    if (!chaza) throw new Error("Chaza not found");
+
     let newOrder = new Order({
       user: order.user,
-      chaza: order.chaza,
+      chaza: chaza._id,
       products: order.products,
-      state: order.state,
       time_to_delivery: order.time_to_delivery,
       total: order.total,
     });
