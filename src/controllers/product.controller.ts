@@ -19,13 +19,49 @@ const product = {
   //Route: GET /products
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await productService.getAll();
+      console.log(req.query);
+      let reqpriceOrder = req.query.priceOrder ?? "-1";
+      let reqpriceRange = req.query.priceRange ?? "-1";
+      let reqcategory = req.query.categories ?? "-1";
+
+      if(reqpriceRange === "-1") reqpriceRange = "0,1000000";
+      let data;
+      console.log( reqpriceOrder, "-1",req.query.priceOrder, reqcategory === "-1" );
+      console.log( reqpriceRange, "1,1000000",req.query.priceRange, reqpriceRange === "0,1000000");
+      console.log( reqcategory, "-1",req.query.categories,reqpriceOrder === "-1");
+
+      if (
+        reqcategory === "-1" &&
+        reqpriceOrder === "-1" &&
+        reqpriceRange === "0,1000000"
+      ) {
+        console.log("entro");
+        data = await productService.getAll();
+        return res.status(200).send({
+          message: "Products successfully retrieved",
+          data: data,
+        });
+      }
+      console.log("no entro");
+      const priceOrder: Number = parseInt(reqpriceOrder.toString());
+      const priceRange: Number[] | null = reqpriceRange
+        .toString()
+        .split(",")
+        .map(Number);
+      const category: Number[] | null = reqcategory
+        .toString()
+        .split(",")
+        .map(Number);
+      data = await productService.getByFilters(
+        priceOrder,
+        priceRange,
+        category
+      );
       return res.status(200).send({
         message: "Products successfully retrieved",
         data: data,
       });
     } catch (error: any) {
-      console.log("kely pero k monda");
       return res.status(400).send({ message: error.message });
     }
   },
@@ -64,50 +100,6 @@ const product = {
       const data = await productService.delete(req.body.chaza_id, req.body._id);
       return res.status(200).send({
         message: "Product successfully deleted",
-        data: data,
-      });
-    } catch (error: any) {
-      return res.status(400).send({ message: error.message });
-    }
-  },
-
-  //ROUTE: GET /products/filters
-  getProductsByFilters: async (
-    req: Request,
-    res: Response
-  ): Promise<Response> => {
-    try {
-      console.log(req.query);
-      req.query.priceOrder =
-        req.query.priceOrder === undefined ? "1" : req.query.priceOrder;
-      req.query.priceRange =
-        req.query.priceRange === undefined ? "0,1000000" : req.query.priceRange;
-      req.query.category =
-        req.query.category === undefined ? "1,2,3,4,5,6,7" : req.query.category;
-
-      console.log(
-        typeof req.query.priceOrder,
-        typeof req.query.priceRange,
-        typeof req.query.category
-      );
-
-      const priceOrder: Number = parseInt(req.query.priceOrder.toString());
-      console.log(req.query.priceRange.toString().split(","));
-      const priceRange: Number[] | null = req.query.priceRange
-        .toString()
-        .split(",")
-        .map(Number);
-      const category: Number[] | null = req.query.category
-        .toString()
-        .split(",")
-        .map(Number);
-      const data = await productService.getByFilters(
-        priceOrder,
-        priceRange,
-        category
-      );
-      return res.status(200).send({
-        message: "Products successfully filtered",
         data: data,
       });
     } catch (error: any) {

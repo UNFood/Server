@@ -135,10 +135,18 @@ const productService = {
     priceRange: Number[],
     category: Number[]
   ): Promise<ProductI[]> {
-    const query = {
+
+    let query:{} = {
       price: { $gte: priceRange[0], $lte: priceRange[1] },
-      category: { $in: category },
     };
+    
+    if(category[0]!==-1){
+      query = {
+        ...query,
+        category: {$in: category},
+      };
+    }
+    
     const productListDB = await Product.find(query)
       .sort({ price: priceOrder === 1 ? "ascending" : "descending" })
       .exec();
