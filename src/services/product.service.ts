@@ -140,7 +140,7 @@ const productService = {
       price: { $gte: priceRange[0], $lte: priceRange[1] },
     };
     
-    if(category[0]!==-1){
+    if(category[0]!==0){
       query = {
         ...query,
         category: {$in: category},

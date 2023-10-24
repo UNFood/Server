@@ -20,19 +20,14 @@ const product = {
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
       console.log(req.query);
-      let reqpriceOrder = req.query.priceOrder ?? "-1";
-      let reqpriceRange = req.query.priceRange ?? "-1";
-      let reqcategory = req.query.categories ?? "-1";
+      let reqpriceOrder = req.query.priceOrder ?? "0";
+      let reqpriceRange = req.query.priceRange ?? "0,1000000";
+      let reqcategory = req.query.categories ?? "0,";
 
-      if(reqpriceRange === "-1") reqpriceRange = "0,1000000";
       let data;
-      console.log( reqpriceOrder, "-1",req.query.priceOrder, reqcategory === "-1" );
-      console.log( reqpriceRange, "1,1000000",req.query.priceRange, reqpriceRange === "0,1000000");
-      console.log( reqcategory, "-1",req.query.categories,reqpriceOrder === "-1");
-
       if (
-        reqcategory === "-1" &&
-        reqpriceOrder === "-1" &&
+        reqcategory === "0," &&
+        reqpriceOrder === "0" &&
         reqpriceRange === "0,1000000"
       ) {
         console.log("entro");
