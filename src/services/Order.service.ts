@@ -1,34 +1,66 @@
 import Order from "../models/Order";
 import Chaza from "../models/Chaza";
-import { orderI, orderCreateI, orderUpdateI } from "../types/order";
+import { orderI, orderCreateI, orderUpdateI, orderReadI } from "../types/order";
+import productService from "./product.service";
 
 const orderService = {
-  getByChaza: async function (chaza_id: String): Promise<orderI[]> {
+  getByChaza: async function (chaza_id: String): Promise<orderReadI[]> {
     const orderDB = await Order.find({ chaza: chaza_id }).exec();
     if (!orderDB) throw new Error("Orders not found");
-    let orders = orderDB.map((order) => ({
-      _id: order._id,
-      user: order.user,
-      chaza: order.chaza,
-      products: order.products,
-      state: order.state,
-      time_to_delivery: order.time_to_delivery,
-      total: order.total,
-    }));
+
+    let orders = await Promise.all(
+      orderDB.map(async (order) => {
+        let products = await productService.getProductsList(
+          order.products.map((product) => product.product.toString())
+        );
+
+        const dataProducts = products.map((product, index) => ({
+          product: product,
+          quantity: order.products[index].quantity,
+        }));
+
+        let data: orderReadI = {
+          _id: order._id,
+          user: order.user,
+          chaza: order.chaza,
+          products: dataProducts,
+          state: order.state,
+          time_to_delivery: order.time_to_delivery,
+          total: order.total,
+          createdAt: order.createdAt,
+        };
+        return data;
+      })
+    );
     return orders;
   },
-  getByUser: async function (id_user: String): Promise<orderI[]> {
+  getByUser: async function (id_user: String): Promise<orderReadI[]> {
     const orderDB = await Order.find({ user: id_user }).exec();
     if (!orderDB) throw new Error("Orders not found");
-    let orders = orderDB.map((order) => ({
-      _id: order._id,
-      user: order.user,
-      chaza: order.chaza,
-      products: order.products,
-      state: order.state,
-      time_to_delivery: order.time_to_delivery,
-      total: order.total,
-    }));
+    let orders = await Promise.all(
+      orderDB.map(async (order) => {
+        let products = await productService.getProductsList(
+          order.products.map((product) => product.product.toString())
+        );
+
+        const dataProducts = products.map((product, index) => ({
+          product: product,
+          quantity: order.products[index].quantity,
+        }));
+
+        let data: orderReadI = {
+          _id: order._id,
+          user: order.user,
+          chaza: order.chaza,
+          products: dataProducts,
+          state: order.state,
+          time_to_delivery: order.time_to_delivery,
+          total: order.total,
+          createdAt: order.createdAt,
+        };
+        return data;
+      })
+    );
     return orders;
   },
   create: async function (order: orderCreateI): Promise<orderI> {
@@ -37,7 +69,7 @@ const orderService = {
 
     let newOrder = new Order({
       user: order.user,
-      chaza: chaza._id,
+      chaza: chaza.name,
       products: order.products,
       time_to_delivery: order.time_to_delivery,
       total: order.total,
