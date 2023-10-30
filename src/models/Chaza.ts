@@ -22,6 +22,14 @@ const chazaSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    latitude: {
+      type: Number,
+      required: true,
+    },
+    longitude: {
+      type: Number,
+      required: true,
+    },
     phone: {
       type: String,
       required: true,
@@ -40,6 +48,18 @@ const chazaSchema = new mongoose.Schema(
       type: String,
       requried: true,
     },
+      // Add the GeoJSON location field
+  location: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true
+    }
+  },
     payment_method: [
       {
         type: Number,
@@ -52,6 +72,7 @@ const chazaSchema = new mongoose.Schema(
   }
 );
 
+chazaSchema.index({ location: "2dsphere" });
 const Chaza = mongoose.model("Chaza", chazaSchema);
 
 export default Chaza;

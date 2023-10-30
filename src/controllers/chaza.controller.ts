@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import chazaService from "../services/chaza.service";
+import Chaza from "../models/Chaza";
 
 const chaza = {
   //Route: GET /chaza
@@ -68,6 +69,26 @@ const chaza = {
       });
     } catch (error: any) {
       return res.status(400).send({ message: error.message });
+    }
+  },
+  //Route: GET /chazas/filterByLocation
+  filterByLocation: async (req: Request, res: Response): Promise<Response> => {
+    const { latitude, longitude, radius = 5 } = req.query;
+    try {
+      const lat = parseFloat(latitude as string);
+      const lon = parseFloat(longitude as string);
+      const rad = parseFloat(radius as string);
+
+      const chazas = await Chaza.find({
+        location: {
+          $geoWithin: {
+            $centerSphere: [[lon, lat], rad / 3963.2], // radius in miles
+          },
+        },
+      });
+      return res.status(200).json({ chazas });
+    } catch (error: any) {
+      return res.status(500).json({ error: 'An error occurred while filtering Chazas by location.' });
     }
   },
   //Route: DELETE /deleteChaza
