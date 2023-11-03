@@ -11,6 +11,8 @@ const chaza_router = Router();
 chaza_router.get("/byId/:id", chaza.getChaza);
 chaza_router.get("/byName/:name", chaza.getChazaByName);
 chaza_router.get("/chazas", chaza.getAllChazas);
+chaza_router.get("/orders", chaza.getAllOrders);
+chaza_router.get("/products", chaza.getAllProducts);
 chaza_router.post(
   "/",
   chazaService.uploadImage.single("image"),

@@ -40,6 +40,30 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
+  //Route: GET /orders
+  getAllOrders: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const data = await chazaService.getAllOrders(req.body.chaza_name);
+      return res.status(200).send({
+        message: "Chaza successfully retrieved",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
+  //Route: GET /products
+  getAllProducts: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const data = await chazaService.getAllProducts(req.body.name_chaza);
+      return res.status(200).send({
+        message: "Chaza successfully retrieved",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+    },
   //Route: POST /createChaza
   createChaza: async (req: Request, res: Response): Promise<Response> => {
     try {

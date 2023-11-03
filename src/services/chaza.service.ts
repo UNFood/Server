@@ -4,6 +4,11 @@ import Chaza from "../models/Chaza";
 import { s3Config } from "../config/s3";
 import { ChazaI, ChazaCreateI, ChazaUpdateI, ChazaReadI } from "../types/chaza";
 import productService from "./product.service";
+import { ProductI } from "../types/product";
+import { orderI } from "../types/order";
+import Product from "../models/Product";
+import Order from "../models/Order";
+import product from "../controllers/product.controller";
 
 const chazaService = {
   get: async function (_id: String): Promise<ChazaReadI | null> {
@@ -75,6 +80,40 @@ const chazaService = {
     }));
     //Retornar el arreglo de chazas
     return chazas;
+  },
+  getAllOrders: async function (chaza: String): Promise<orderI[]> {
+    //Consultar la colección de chazas de la base de datos
+    const orderListDB = await Order.find({ chaza: chaza }).exec();
+    //Convertir el resultado a un arreglo de objetos de tipo ChazaI
+    let orders = orderListDB.map((order) => ({
+      _id: order._id,
+      user: order.user,
+      chaza: order.chaza,
+      products: order.products,
+      state: order.state,
+      time_to_delivery: order.time_to_delivery,
+      total: order.total,
+    }));
+    //Retornar el arreglo de productos
+    return orders;
+  },
+  getAllProducts: async function (chaza: String): Promise<ProductI[]> {
+    //Consultar la colección de chazas de la base de datos
+    const productListDB = await Product.find({ name_chaza: chaza }).exec();
+    //Convertir el resultado a un arreglo de objetos de tipo ChazaI
+    let products = productListDB.map((product) => ({
+      _id: product._id,
+      name: product.name,
+      name_chaza: product.name_chaza,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      stock: product.stock,
+      image: product.image,
+      total_sales: product.total_sales,
+    }));
+    //Retornar el arreglo de productos
+    return products;
   },
   create: async function (chaza: ChazaCreateI, image: string): Promise<ChazaI> {
     const chazaExist = await this.getByName(chaza.name);
