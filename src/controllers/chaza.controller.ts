@@ -55,7 +55,7 @@ const chaza = {
   //Route: GET /products
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await chazaService.getAllProducts(req.body.name_chaza);
+      const data = await chazaService.getAllProducts(req.body.chaza_name);
       return res.status(200).send({
         message: "Chaza successfully retrieved",
         data: data,
