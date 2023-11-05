@@ -92,7 +92,8 @@ const product = {
   //Route: DELETE /deleteProduct
   deleteProduct: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await productService.delete(req.body.chaza_id, req.body._id);
+      const id = req.params.id;
+      const data = await productService.delete(id.toString());
       return res.status(200).send({
         message: "Product successfully deleted",
         data: data,

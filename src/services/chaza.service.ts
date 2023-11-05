@@ -158,7 +158,7 @@ const chazaService = {
   deleteProduct: async function (chaza_id: String, product_id: String) {
     //Eliminar el producto de la chaza
     const chazaDB = await Chaza.findOneAndUpdate(
-      { owner: chaza_id },
+      { _id: chaza_id },
       { $pull: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error deleting product from chaza");
