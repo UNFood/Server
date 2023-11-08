@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
     },
+    googleId: { // This is the new field for storing the Google ID
+      type: String,
+      required: false, // Make this false if the user can also sign up without Google
+    },
   },
   {
     timestamps: true,

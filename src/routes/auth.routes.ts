@@ -1,9 +1,10 @@
 import express from "express";
-import auth from "../controllers/auth.controller";
+// Import the named function from auth.controller
+import { authenticateWithGoogle } from "../controllers/auth.controller";
 
-const auth_router = express.Router();
+const authRouter = express.Router();
 
-auth_router.post("/signup", auth.signup);
-auth_router.post("/login", auth.login);
+// Use the named function in your route
+authRouter.post("/google-auth", authenticateWithGoogle); // Assuming you have a route for Google authentication
 
-export default auth_router;
+export default authRouter;
