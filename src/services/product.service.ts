@@ -108,10 +108,13 @@ const productService = {
     //Retornar el objeto actualizado
     return updateProduct;
   },
-  delete: async function (chaza_id: String, _id: String): Promise<ProductI> {
+  delete: async function (id: String): Promise<ProductI> {
     //Eliminar el producto de la base de datos
-    const productDB = await Product.findOneAndDelete({ _id: _id }).exec();
-    if (!productDB) throw new Error("Error deleting product");
+    const productDB = await Product.findById(id).exec();
+    if (!productDB) throw new Error("Product not found");
+
+    const chaza = await chazaService.getByName(productDB.name_chaza);
+    if (!chaza) throw new Error("Chaza not found");
     //Convertir el resultado a un objeto de tipo ProductI
     let deleteProduct: ProductI = {
       _id: productDB._id,
@@ -124,8 +127,15 @@ const productService = {
       image: productDB.image,
       total_sales: productDB.total_sales,
     };
+
     //Eliminar el producto de la chaza
-    await chazaService.deleteProduct(chaza_id, productDB._id.toString());
+    await chazaService.deleteProduct(
+      chaza._id.toString(),
+      productDB._id.toString()
+    );
+
+    const productDeleted = await Product.findByIdAndDelete(id).exec();
+    if (!productDeleted) throw new Error("Error deleting product");
     //Retornar el objeto eliminado
     return deleteProduct;
   },
@@ -135,18 +145,17 @@ const productService = {
     priceRange: Number[],
     category: Number[]
   ): Promise<ProductI[]> {
-
-    let query:{} = {
+    let query: {} = {
       price: { $gte: priceRange[0], $lte: priceRange[1] },
     };
-    
-    if(category[0]!==0){
+
+    if (category[0] !== 0) {
       query = {
         ...query,
-        category: {$in: category},
+        category: { $in: category },
       };
     }
-    
+
     const productListDB = await Product.find(query)
       .sort({ price: priceOrder === 1 ? "ascending" : "descending" })
       .exec();
