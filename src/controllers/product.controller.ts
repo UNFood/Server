@@ -19,39 +19,8 @@ const product = {
   //Route: GET /products
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
-      console.log(req.query);
-      let reqpriceOrder = req.query.priceOrder ?? "0";
-      let reqpriceRange = req.query.priceRange ?? "0,1000000";
-      let reqcategory = req.query.categories ?? "0,";
+      const data = await productService.getAll();
 
-      let data;
-      if (
-        reqcategory === "0," &&
-        reqpriceOrder === "0" &&
-        reqpriceRange === "0,1000000"
-      ) {
-        console.log("entro");
-        data = await productService.getAll();
-        return res.status(200).send({
-          message: "Products successfully retrieved",
-          data: data,
-        });
-      }
-      console.log("no entro");
-      const priceOrder: Number = parseInt(reqpriceOrder.toString());
-      const priceRange: Number[] | null = reqpriceRange
-        .toString()
-        .split(",")
-        .map(Number);
-      const category: Number[] | null = reqcategory
-        .toString()
-        .split(",")
-        .map(Number);
-      data = await productService.getByFilters(
-        priceOrder,
-        priceRange,
-        category
-      );
       return res.status(200).send({
         message: "Products successfully retrieved",
         data: data,
