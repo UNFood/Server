@@ -2,8 +2,15 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import Chaza from "../models/Chaza";
 import { s3Config } from "../config/s3";
-import { ChazaI, ChazaCreateI, ChazaUpdateI, ChazaReadI } from "../types/chaza";
+import {
+  ChazaI,
+  ChazaCreateI,
+  ChazaUpdateI,
+  ChazaReadI,
+  comment,
+} from "../types/chaza";
 import productService from "./product.service";
+import chaza from "../controllers/chaza.controller";
 
 const chazaService = {
   get: async function (_id: String): Promise<ChazaReadI | null> {
@@ -27,6 +34,7 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      comments: chazaDB.comments,
     };
     //Retornar la chaza
     return chaza;
@@ -52,6 +60,7 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      comments: chazaDB.comments,
     };
     //Retornar la chaza
     return chaza;
@@ -116,12 +125,30 @@ const chazaService = {
   update: async function (newChaza: ChazaUpdateI): Promise<void> {
     //Actualizar la chaza en la base de datos no retorna nada pues
     //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
-    console.log(newChaza);
     const chazaDB = await Chaza.findOneAndUpdate(
       { owner: newChaza.owner },
       newChaza
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");
+  },
+  addComment: async function (
+    owner: String,
+    newComment: comment
+  ): Promise<void> {
+    //Agregar el comentario a la chaza
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: owner },
+      { $push: { comments: newComment } }
+    ).exec();
+    if (!chazaDB) throw new Error("Error adding comment to chaza");
+
+    let score = Number(newComment.calification) ?? 0;
+
+    chazaDB.comments.forEach((comment) => {
+      score += comment.calification;
+    });
+    chazaDB.score = Math.floor(score / chazaDB.comments.length);
+    chazaDB.save();
   },
   delete: async function (_id: String): Promise<ChazaI> {
     //Eliminar la chaza de la base de datos

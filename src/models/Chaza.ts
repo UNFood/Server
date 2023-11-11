@@ -45,6 +45,26 @@ const chazaSchema = new mongoose.Schema(
         type: Number,
       },
     ],
+    comments: [
+      {
+        user: {
+          type: String,
+          required: true,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        calification: {
+          type: Number,
+          required: true,
+        },
+        date: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
