@@ -70,6 +70,18 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
+  addComment: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const owner = req.params.id;
+      const data = await chazaService.addComment(owner, req.body);
+      return res.status(200).send({
+        message: "Comment successfully added",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
   //Route: DELETE /deleteChaza
   deleteChaza: async (req: Request, res: Response): Promise<Response> => {
     try {

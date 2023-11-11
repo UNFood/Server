@@ -16,6 +16,7 @@ chaza_router.post(
   chazaService.uploadImage.single("image"),
   chaza.createChaza
 );
+chaza_router.post("/comment/:id", chaza.addComment);
 chaza_router.put("/", verifyTokenChaza, chaza.updateChaza);
 chaza_router.delete("/:id", verifyTokenChaza, chaza.deleteChaza);
 
