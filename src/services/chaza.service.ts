@@ -7,6 +7,7 @@ import {
   ChazaCreateI,
   ChazaUpdateI,
   ChazaReadI,
+  ChazaQRI,
   comment,
 } from "../types/chaza";
 import productService from "./product.service";
@@ -35,6 +36,7 @@ const chazaService = {
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
       comments: chazaDB.comments,
+      qr: chazaDB.qr,
     };
     //Retornar la chaza
     return chaza;
@@ -61,6 +63,7 @@ const chazaService = {
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
       comments: chazaDB.comments,
+      qr: chazaDB.qr,
     };
     //Retornar la chaza
     return chaza;
@@ -150,6 +153,17 @@ const chazaService = {
     chazaDB.score = Math.floor(score / chazaDB.comments.length);
     chazaDB.save();
   },
+  uploadQR: async function (_id: String, image: string): Promise<ChazaQRI> {
+    const chazaDB = await Chaza.findOne({ owner: _id }).exec(); //Esto hay que corregirlo
+    if (!chazaDB) throw new Error("Error uploading QR");
+    //Convertir el resultado a un objeto de tipo ChazaI
+    let chaza: ChazaQRI = {
+      _id: chazaDB._id,
+      qr: image,
+    };
+    //Retornar la chaza creada
+    return chaza;
+  },  
   delete: async function (_id: String): Promise<ChazaI> {
     //Eliminar la chaza de la base de datos
     const chazaDB = await Chaza.findOneAndDelete({ owner: _id }).exec();
