@@ -84,6 +84,7 @@ const chazaService = {
       score: chaza.score,
       image: chaza.image,
       payment_method: chaza.payment_method,
+      qr: chaza.qr,
     }));
     //Retornar el arreglo de chazas
     return chazas;
@@ -103,6 +104,7 @@ const chazaService = {
       score: chaza.score,
       image: image,
       payment_method: chaza.payment_method,
+      qr: "",
     });
     if (!newChaza) throw new Error("Error creating chaza");
     //Guardar la chaza en la base de datos
@@ -121,6 +123,7 @@ const chazaService = {
       score: result.score,
       image: result.image,
       payment_method: result.payment_method,
+      qr: result.qr,
     };
     //Retornar la chaza creada
     return data;
@@ -134,6 +137,13 @@ const chazaService = {
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");
   },
+  uploadQR: async function (newChaza: ChazaQRI, image: string): Promise<void> {
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: newChaza._id },
+      { qr: image }
+    ).exec();
+    if (!chazaDB) throw new Error("Error uploading QR");
+  },  
   addComment: async function (
     owner: String,
     newComment: comment
@@ -153,17 +163,6 @@ const chazaService = {
     chazaDB.score = Math.floor(score / chazaDB.comments.length);
     chazaDB.save();
   },
-  uploadQR: async function (_id: String, image: string): Promise<ChazaQRI> {
-    const chazaDB = await Chaza.findOne({ owner: _id }).exec(); //Esto hay que corregirlo
-    if (!chazaDB) throw new Error("Error uploading QR");
-    //Convertir el resultado a un objeto de tipo ChazaI
-    let chaza: ChazaQRI = {
-      _id: chazaDB._id,
-      qr: image,
-    };
-    //Retornar la chaza creada
-    return chaza;
-  },  
   delete: async function (_id: String): Promise<ChazaI> {
     //Eliminar la chaza de la base de datos
     const chazaDB = await Chaza.findOneAndDelete({ owner: _id }).exec();
@@ -181,6 +180,7 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      qr: chazaDB.qr,
     };
     //Retornar el objeto eliminado
     return deleteChaza;

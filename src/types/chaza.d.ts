@@ -12,6 +12,7 @@ export interface ChazaI {
   score: Number;
   image: String | undefined;
   payment_method: Number[];
+  qr: String | undefined;
 }
 
 export interface ChazaCreateI {

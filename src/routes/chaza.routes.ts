@@ -18,7 +18,7 @@ chaza_router.post(
 );
 chaza_router.post(
   "/qr",
-  chazaService.uploadImage.single("image"),
+  chazaService.uploadImage.single("qr"),
   chaza.uploadQR
 );
 chaza_router.post("/comment/:id", chaza.addComment);
