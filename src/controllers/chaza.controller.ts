@@ -43,7 +43,7 @@ const chaza = {
   //Route: GET /orders
   getAllOrders: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await chazaService.getAllOrders(req.body.chaza_name);
+      const data = await chazaService.getAllOrders(req.params.name);
       return res.status(200).send({
         message: "Chaza successfully retrieved",
         data: data,
@@ -55,7 +55,7 @@ const chaza = {
   //Route: GET /products
   getAllProducts: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await chazaService.getAllProducts(req.body.chaza_name);
+      const data = await chazaService.getAllProducts(req.params.name);
       return res.status(200).send({
         message: "Chaza successfully retrieved",
         data: data,
@@ -88,6 +88,18 @@ const chaza = {
       const data = await chazaService.update(req.body);
       return res.status(200).send({
         message: "Chaza successfully updated",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
+  addComment: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const owner = req.params.id;
+      const data = await chazaService.addComment(owner, req.body);
+      return res.status(200).send({
+        message: "Comment successfully added",
         data: data,
       });
     } catch (error: any) {

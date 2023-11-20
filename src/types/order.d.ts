@@ -21,10 +21,23 @@ export interface orderI {
   total: Number;
 }
 
-export interface orderReadI {
+export interface orderReadChazaI {
+  _id: mongoose.Types.ObjectId | undefined;
+  user: String;
+  chaza: String;
+  numeroCelular: String;
+  products: productsOrder[];
+  state: Number;
+  time_to_delivery: Date | undefined;
+  total: Number;
+  createdAt: Date | undefined;
+}
+
+export interface orderReadUserI {
   _id: mongoose.Types.ObjectId | undefined;
   user: mongoose.Types.ObjectId | undefined;
   chaza: String;
+  numeroCelular: String;
   products: productsOrder[];
   state: Number;
   time_to_delivery: Date | undefined;
@@ -42,7 +55,7 @@ export interface orderCreateI {
 
 export interface orderUpdateI {
   _id: mongoose.Types.ObjectId | undefined;
-  user: mongoose.Types.ObjectId | undefined;
+  user: String;
   chaza: String;
   products: Array<productsOrder>;
   state: Number;
