@@ -59,6 +59,11 @@ export interface ChazaQRI {
   qr: String | undefined;
 }
 
+export interface ChazaLocationI {
+  _id: mongoose.Types.ObjectId;
+  address: String;
+}
+
 export interface comment {
   user: String | undefined;
   comment: String | undefined;

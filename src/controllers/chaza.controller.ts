@@ -15,6 +15,18 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
+  //Route: GET /chaza
+  getChazaLocations: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const data = await chazaService.getLocations();
+      return res.status(200).send({
+        message: "Chazas successfully retrieved",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
   //Route: GET /chaza/byName
   getChazaByName: async (req: Request, res: Response): Promise<Response> => {
     try {

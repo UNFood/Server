@@ -8,6 +8,7 @@ import {
   ChazaUpdateI,
   ChazaReadI,
   ChazaQRI,
+  ChazaLocationI,
   comment,
 } from "../types/chaza";
 import productService from "./product.service";
@@ -40,6 +41,17 @@ const chazaService = {
     };
     //Retornar la chaza
     return chaza;
+  },
+  getLocations: async function (): Promise<ChazaLocationI[]> {
+    //Consultar la colección de chazas de la base de datos
+    const chazaListDB = await Chaza.find().exec();
+    //Convertir el resultado a un arreglo de objetos de tipo ChazaI
+    let locations = chazaListDB.map((chaza) => ({
+      _id: chaza._id,
+      address: chaza.address,
+    }));
+    //Retornar el arreglo de chazas
+    return locations;
   },
   getByName: async function (name: String): Promise<ChazaReadI | null> {
     //Consultar en la colección de chazas de la base de datos
