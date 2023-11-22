@@ -7,6 +7,7 @@ import {
   ChazaCreateI,
   ChazaUpdateI,
   ChazaReadI,
+  ChazaQRI,
   comment,
 } from "../types/chaza";
 import productService from "./product.service";
@@ -35,6 +36,7 @@ const chazaService = {
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
       comments: chazaDB.comments,
+      qr: chazaDB.qr,
     };
     //Retornar la chaza
     return chaza;
@@ -61,6 +63,7 @@ const chazaService = {
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
       comments: chazaDB.comments,
+      qr: chazaDB.qr,
     };
     //Retornar la chaza
     return chaza;
@@ -81,6 +84,7 @@ const chazaService = {
       score: chaza.score,
       image: chaza.image,
       payment_method: chaza.payment_method,
+      qr: chaza.qr,
     }));
     //Retornar el arreglo de chazas
     return chazas;
@@ -100,6 +104,7 @@ const chazaService = {
       score: chaza.score,
       image: image,
       payment_method: chaza.payment_method,
+      qr: "",
     });
     if (!newChaza) throw new Error("Error creating chaza");
     //Guardar la chaza en la base de datos
@@ -118,6 +123,7 @@ const chazaService = {
       score: result.score,
       image: result.image,
       payment_method: result.payment_method,
+      qr: result.qr,
     };
     //Retornar la chaza creada
     return data;
@@ -131,6 +137,13 @@ const chazaService = {
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");
   },
+  uploadQR: async function (newChaza: ChazaQRI, image: string): Promise<void> {
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: newChaza._id },
+      { qr: image }
+    ).exec();
+    if (!chazaDB) throw new Error("Error uploading QR");
+  },  
   addComment: async function (
     owner: String,
     newComment: comment
@@ -167,6 +180,7 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      qr: chazaDB.qr,
     };
     //Retornar el objeto eliminado
     return deleteChaza;

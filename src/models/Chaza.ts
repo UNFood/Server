@@ -65,6 +65,10 @@ const chazaSchema = new mongoose.Schema(
         },
       },
     ],
+    qr: {
+      type: String,
+      required: false,
+    }
   },
   {
     timestamps: true,

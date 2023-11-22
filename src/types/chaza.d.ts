@@ -12,6 +12,7 @@ export interface ChazaI {
   score: Number;
   image: String | undefined;
   payment_method: Number[];
+  qr: String | undefined;
 }
 
 export interface ChazaCreateI {
@@ -50,6 +51,12 @@ export interface ChazaReadI {
   image: String | undefined;
   payment_method: Number[];
   comments: comment[] | undefined;
+  qr: String | undefined;
+}
+
+export interface ChazaQRI {
+  _id: mongoose.Types.ObjectId;
+  qr: String | undefined;
 }
 
 export interface comment {

@@ -82,6 +82,23 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
+  uploadQR: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      if (req.file === undefined)
+        return res.status(400).send({ message: "No file uploaded" });
+
+      const data = await chazaService.uploadQR(
+        req.body,
+        (req.file as Express.MulterS3.File).location
+      );
+      return res.status(200).send({
+        message: "QR successfully updated",
+        data: { data },
+      });
+    } catch (error: any) {
+      return res.status(500).send({ message: error.message });
+    }
+  },
   //Route: DELETE /deleteChaza
   deleteChaza: async (req: Request, res: Response): Promise<Response> => {
     try {
