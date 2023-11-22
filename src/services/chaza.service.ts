@@ -41,6 +41,14 @@ const chazaService = {
     //Retornar la chaza
     return chaza;
   },
+  getLocation: async function (_id: String): Promise<String> {
+    //Consultar en la colección de chazas de la base de datos
+    const chazaDB = await Chaza.findOne({ owner: _id }).exec();
+    if (!chazaDB) return "";
+    let address = chazaDB.address
+    //Retornar la dirección
+    return address;
+  },
   getByName: async function (name: String): Promise<ChazaReadI | null> {
     //Consultar en la colección de chazas de la base de datos
     const chazaDB = await Chaza.findOne({ name: name }).exec();
