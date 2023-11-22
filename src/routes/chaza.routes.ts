@@ -9,9 +9,9 @@ const chaza_router = Router();
 
 //Routes
 chaza_router.get("/byId/:id", chaza.getChaza);
-chaza_router.get("/location/:id", chaza.getChazaLocation);
 chaza_router.get("/byName/:name", chaza.getChazaByName);
 chaza_router.get("/chazas", chaza.getAllChazas);
+chaza_router.get("/locations", chaza.getChazaLocations);
 chaza_router.post(
   "/",
   chazaService.uploadImage.single("image"),

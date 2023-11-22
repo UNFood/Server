@@ -16,12 +16,11 @@ const chaza = {
     }
   },
   //Route: GET /chaza
-  getChazaLocation: async (req: Request, res: Response): Promise<Response> => {
+  getChazaLocations: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const data = await chazaService.get(req.params.id);
-      if (!data) return res.status(200).send({ message: "Chaza not found" });
+      const data = await chazaService.getLocations();
       return res.status(200).send({
-        message: "Chaza location successfully retrieved",
+        message: "Chazas successfully retrieved",
         data: data,
       });
     } catch (error: any) {
