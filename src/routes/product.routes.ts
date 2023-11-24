@@ -15,7 +15,6 @@ product_router.post(
   product.createProduct
 );
 product_router.put("/", product.updateProduct);
-product_router.delete("/", product.deleteProduct);
-product_router.get("/products/filters", product.getProductsByFilters);
+product_router.delete("/:id", product.deleteProduct);
 
 export default product_router;

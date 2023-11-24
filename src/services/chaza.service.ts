@@ -2,8 +2,17 @@ import multer from "multer";
 import multerS3 from "multer-s3";
 import Chaza from "../models/Chaza";
 import { s3Config } from "../config/s3";
-import { ChazaI, ChazaCreateI, ChazaUpdateI, ChazaReadI } from "../types/chaza";
+import {
+  ChazaI,
+  ChazaCreateI,
+  ChazaUpdateI,
+  ChazaReadI,
+  ChazaQRI,
+  ChazaLocationI,
+  comment,
+} from "../types/chaza";
 import productService from "./product.service";
+import chaza from "../controllers/chaza.controller";
 
 const chazaService = {
   get: async function (_id: String): Promise<ChazaReadI | null> {
@@ -27,9 +36,22 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      comments: chazaDB.comments,
+      qr: chazaDB.qr,
     };
     //Retornar la chaza
     return chaza;
+  },
+  getLocations: async function (): Promise<ChazaLocationI[]> {
+    //Consultar la colección de chazas de la base de datos
+    const chazaListDB = await Chaza.find().exec();
+    //Convertir el resultado a un arreglo de objetos de tipo ChazaI
+    let locations = chazaListDB.map((chaza) => ({
+      _id: chaza._id,
+      address: chaza.address,
+    }));
+    //Retornar el arreglo de chazas
+    return locations;
   },
   getByName: async function (name: String): Promise<ChazaReadI | null> {
     //Consultar en la colección de chazas de la base de datos
@@ -52,6 +74,8 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      comments: chazaDB.comments,
+      qr: chazaDB.qr,
     };
     //Retornar la chaza
     return chaza;
@@ -72,6 +96,7 @@ const chazaService = {
       score: chaza.score,
       image: chaza.image,
       payment_method: chaza.payment_method,
+      qr: chaza.qr,
     }));
     //Retornar el arreglo de chazas
     return chazas;
@@ -91,6 +116,7 @@ const chazaService = {
       score: chaza.score,
       image: image,
       payment_method: chaza.payment_method,
+      qr: "",
     });
     if (!newChaza) throw new Error("Error creating chaza");
     //Guardar la chaza en la base de datos
@@ -109,6 +135,7 @@ const chazaService = {
       score: result.score,
       image: result.image,
       payment_method: result.payment_method,
+      qr: result.qr,
     };
     //Retornar la chaza creada
     return data;
@@ -116,12 +143,37 @@ const chazaService = {
   update: async function (newChaza: ChazaUpdateI): Promise<void> {
     //Actualizar la chaza en la base de datos no retorna nada pues
     //findOneAndUpdate no retorna el objeto actualizado sino el objeto antes de actualizar
-    console.log(newChaza);
     const chazaDB = await Chaza.findOneAndUpdate(
       { owner: newChaza.owner },
       newChaza
     ).exec();
     if (!chazaDB) throw new Error("Error updating chaza");
+  },
+  uploadQR: async function (newChaza: ChazaQRI, image: string): Promise<void> {
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: newChaza._id },
+      { qr: image }
+    ).exec();
+    if (!chazaDB) throw new Error("Error uploading QR");
+  },  
+  addComment: async function (
+    owner: String,
+    newComment: comment
+  ): Promise<void> {
+    //Agregar el comentario a la chaza
+    const chazaDB = await Chaza.findOneAndUpdate(
+      { owner: owner },
+      { $push: { comments: newComment } }
+    ).exec();
+    if (!chazaDB) throw new Error("Error adding comment to chaza");
+
+    let score = Number(newComment.calification) ?? 0;
+
+    chazaDB.comments.forEach((comment) => {
+      score += comment.calification;
+    });
+    chazaDB.score = Math.floor(score / chazaDB.comments.length);
+    chazaDB.save();
   },
   delete: async function (_id: String): Promise<ChazaI> {
     //Eliminar la chaza de la base de datos
@@ -140,6 +192,7 @@ const chazaService = {
       score: chazaDB.score,
       image: chazaDB.image,
       payment_method: chazaDB.payment_method,
+      qr: chazaDB.qr,
     };
     //Retornar el objeto eliminado
     return deleteChaza;
@@ -158,7 +211,7 @@ const chazaService = {
   deleteProduct: async function (chaza_id: String, product_id: String) {
     //Eliminar el producto de la chaza
     const chazaDB = await Chaza.findOneAndUpdate(
-      { owner: chaza_id },
+      { _id: chaza_id },
       { $pull: { products: product_id } }
     ).exec();
     if (!chazaDB) throw new Error("Error deleting product from chaza");

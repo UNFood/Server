@@ -8,7 +8,8 @@ const orderSchema = new mongoose.Schema(
     },
     chaza: {
       ref: "Chaza",
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
+      required: true,
     },
     products: [
       {
@@ -24,9 +25,9 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     state: {
-      type: String,
+      type: Number,
       required: true,
-      default: "Pendiente",
+      default: 0,
     },
     time_to_delivery: {
       type: Date,

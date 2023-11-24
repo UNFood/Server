@@ -1,5 +1,5 @@
-import mongoose, { StringExpressionOperatorReturningBoolean } from "mongoose";
-import {ProductI} from "./product";
+import mongoose from "mongoose";
+import { ProductI } from "./product";
 export interface ChazaI {
   _id: mongoose.Types.ObjectId;
   owner: mongoose.Types.ObjectId | undefined;
@@ -12,6 +12,7 @@ export interface ChazaI {
   score: Number;
   image: String | undefined;
   payment_method: Number[];
+  qr: String | undefined;
 }
 
 export interface ChazaCreateI {
@@ -34,9 +35,10 @@ export interface ChazaUpdateI {
   type: Number;
   phone: String;
   payment_method: Number[];
+  comments: comment[];
 }
 
-export interface ChazaReadI{
+export interface ChazaReadI {
   _id: mongoose.Types.ObjectId;
   owner: mongoose.Types.ObjectId | undefined;
   name: String;
@@ -48,4 +50,23 @@ export interface ChazaReadI{
   score: Number;
   image: String | undefined;
   payment_method: Number[];
+  comments: comment[] | undefined;
+  qr: String | undefined;
+}
+
+export interface ChazaQRI {
+  _id: mongoose.Types.ObjectId;
+  qr: String | undefined;
+}
+
+export interface ChazaLocationI {
+  _id: mongoose.Types.ObjectId;
+  address: String;
+}
+
+export interface comment {
+  user: String | undefined;
+  comment: String | undefined;
+  calification: number | undefined;
+  date: String | undefined;
 }

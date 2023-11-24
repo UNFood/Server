@@ -15,6 +15,18 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
+  //Route: GET /chaza
+  getChazaLocations: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const data = await chazaService.getLocations();
+      return res.status(200).send({
+        message: "Chazas successfully retrieved",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
   //Route: GET /chaza/byName
   getChazaByName: async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -68,6 +80,35 @@ const chaza = {
       });
     } catch (error: any) {
       return res.status(400).send({ message: error.message });
+    }
+  },
+  addComment: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const owner = req.params.id;
+      const data = await chazaService.addComment(owner, req.body);
+      return res.status(200).send({
+        message: "Comment successfully added",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
+  uploadQR: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      if (req.file === undefined)
+        return res.status(400).send({ message: "No file uploaded" });
+
+      const data = await chazaService.uploadQR(
+        req.body,
+        (req.file as Express.MulterS3.File).location
+      );
+      return res.status(200).send({
+        message: "QR successfully updated",
+        data: { data },
+      });
+    } catch (error: any) {
+      return res.status(500).send({ message: error.message });
     }
   },
   //Route: DELETE /deleteChaza
