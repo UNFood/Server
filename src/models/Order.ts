@@ -8,13 +8,15 @@ const orderSchema = new mongoose.Schema(
     },
     chaza: {
       ref: "Chaza",
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
+      required: true,
     },
     products: [
       {
         product: {
           ref: "Product",
           type: mongoose.Schema.Types.ObjectId,
+          required: true,
         },
         quantity: {
           type: Number,
@@ -22,6 +24,14 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    state: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    time_to_delivery: {
+      type: Date,
+    },
     total: {
       type: Number,
       required: true,
