@@ -70,3 +70,8 @@ export interface comment {
   calification: number | undefined;
   date: String | undefined;
 }
+
+export interface chazaNumbers {
+  chazas: number;
+  products: number;
+}

@@ -123,6 +123,17 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
+  getChazaNumbers: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const data = await chazaService.getNumbers();
+      return res.status(200).send({
+        message: "Chaza numbers successfully retrieved",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    }
+  },
 };
 
 export default chaza;
