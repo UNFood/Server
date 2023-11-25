@@ -10,6 +10,7 @@ import {
   ChazaQRI,
   ChazaLocationI,
   comment,
+  chazaNumbers,
 } from "../types/chaza";
 import productService from "./product.service";
 import chaza from "../controllers/chaza.controller";
@@ -155,7 +156,7 @@ const chazaService = {
       { qr: image }
     ).exec();
     if (!chazaDB) throw new Error("Error uploading QR");
-  },  
+  },
   addComment: async function (
     owner: String,
     newComment: comment
@@ -226,6 +227,11 @@ const chazaService = {
       },
     }),
   }),
+  getNumbers: async function (): Promise<chazaNumbers> {
+    const chazaNumber = await Chaza.count().exec();
+    const productNumber = await productService.getNumbers();
+    return { chazas: chazaNumber, products: productNumber };
+  },
 };
 
 export default chazaService;

@@ -204,6 +204,10 @@ const productService = {
     }));
     return productsList;
   },
+  getNumbers: async function (): Promise<number> {
+    const productNumber = await Product.count().exec();
+    return productNumber;
+  },
 };
 
 export default productService;

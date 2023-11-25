@@ -30,7 +30,7 @@ const authServices = {
     const token = jwt.sign(
       { username: newUser.username, id: newUser._id },
       secret,
-      { expiresIn: "2h" }
+      { expiresIn: "24h" }
     );
     console.log(token);
     const result = await newUser.save();
@@ -51,7 +51,7 @@ const authServices = {
     const token = jwt.sign(
       { username: userExist.username, id: userExist._id },
       secret,
-      { expiresIn: "2h" }
+      { expiresIn: "24h" }
     );
 
     return token;
