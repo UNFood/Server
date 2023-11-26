@@ -11,7 +11,9 @@ import {
   ChazaLocationI,
   comment,
   chazaNumbers,
+  Stats
 } from "../types/chaza";
+import orderService from "./Order.service";
 import productService from "./product.service";
 import chaza from "../controllers/chaza.controller";
 
@@ -232,6 +234,15 @@ const chazaService = {
     const productNumber = await productService.getNumbers();
     return { chazas: chazaNumber, products: productNumber };
   },
+
+  getStats : async function (_id :string) : Promise<Stats>{
+    const chaza = await this.get(_id);
+    if (!chaza) throw new Error("Chaza No  exist");
+    const products = chaza?.products ;
+    const orders = await orderService.getByChaza(_id);
+
+    return {products : products,orders : orders};
+  }
 };
 
 export default chazaService;

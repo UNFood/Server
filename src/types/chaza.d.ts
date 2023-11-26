@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ProductI } from "./product";
+import { orderReadChazaI } from "./order";
 export interface ChazaI {
   _id: mongoose.Types.ObjectId;
   owner: mongoose.Types.ObjectId | undefined;
@@ -74,4 +75,9 @@ export interface comment {
 export interface chazaNumbers {
   chazas: number;
   products: number;
+}
+
+export interface Stats{
+  orders: orderReadChazaI[];
+  products: ProductI[];
 }

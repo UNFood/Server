@@ -21,5 +21,6 @@ chaza_router.post("/comment/:id", chaza.addComment);
 chaza_router.put("/", verifyTokenChaza, chaza.updateChaza);
 chaza_router.delete("/:id", verifyTokenChaza, chaza.deleteChaza);
 chaza_router.get("/numbers", chaza.getChazaNumbers);
+chaza_router.get("/stats/:id", chaza.getStats);
 
 export default chaza_router;

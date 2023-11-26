@@ -134,6 +134,17 @@ const chaza = {
       return res.status(400).send({ message: error.message });
     }
   },
-};
+
+  getStats : async (req: Request, res:Response): Promise<Response> =>{
+    try{
+      const data = await chazaService.getStats(req.params.id);
+      return res.status(200).send({
+        message: "Chaza exitosa",
+        data: data,
+      });
+    } catch (error: any) {
+      return res.status(400).send({ message: error.message });
+    
+  }},}
 
 export default chaza;
