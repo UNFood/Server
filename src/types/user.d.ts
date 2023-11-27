@@ -16,6 +16,7 @@ export interface UserRegister {
   lastName: string;
   email: string;
   password: string;
+  phone: string;
 }
 
 export interface UserLogin {

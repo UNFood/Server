@@ -1,5 +1,6 @@
 import User from "../models/User";
 import { UserI, userUpdate } from "../types/user";
+import { comparePassword } from "../middlewares/auth";
 
 const UserService = {
   get: async function (_id: string): Promise<UserI> {
@@ -34,6 +35,15 @@ const UserService = {
   },
 
   update: async function (newUser: userUpdate): Promise<UserI> {
+    const userExist = await User.findOne({ _id: newUser._id });
+    if (!userExist) throw new Error("User not found");
+
+    const validPassword = await comparePassword(
+      newUser.password,
+      userExist.password
+    );
+    if (!validPassword) throw new Error("Invalid password");
+    newUser.password = userExist.password;
     const userDB = await User.findByIdAndUpdate(
       {
         _id: newUser._id,
