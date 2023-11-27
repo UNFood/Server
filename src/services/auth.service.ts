@@ -23,8 +23,8 @@ const authServices = {
       lastName: user.lastName,
       email: user.email,
       password: await encryptPassword(user.password),
-      phone: "",
-      address: "",
+      phone: user.phone,
+      address: " ",
     });
 
     const token = jwt.sign(
